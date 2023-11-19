@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">AppBlackDog</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">Ingrese su email</string>
+    <string name="password_label">Contraseña</string>
+    <string name="password_placeholder">Ingrese su Contraseña</string>
+    <string name="remember_me">Recordarme</string>
+    <string name="login">Iniciar Sesion</string>
 </resources>

@@ -55,6 +55,7 @@ fun HelloOwner() {
     ) {
         Image(
             painter = painterResource(id = R.drawable.owner_profile),
+
             contentDescription = "owner",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
