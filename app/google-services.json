@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "16488667524",
+    "project_id": "blackdog-c07fa",
+    "storage_bucket": "blackdog-c07fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16488667524:android:e200827f6c97c2e3da25d1",
+        "android_client_info": {
+          "package_name": "com.dadm.appblackdog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5dvlVTtN0lbtop0lXcIes41EE0yKO-CQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
