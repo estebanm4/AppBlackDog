@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -38,43 +42,58 @@ fun LoginForm(
     val uiState by loginViewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
     // UI
-    Column(
+    if (!uiState.isLoaderEnable)
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 30.dp)
+        ) {
+            EmailField(
+                value = uiState.email,
+                onChange = { data -> loginViewModel.updateEmail(data) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            PasswordField(
+                value = uiState.password,
+                modifier = Modifier.fillMaxWidth(),
+                onChange = { data -> loginViewModel.updatePassword(data) },
+                submit = {
+                    scope.launch {
+                        loginViewModel.firebaseLogin(context = context)
+                    }
+                },
+            )
+            LabelCheckbox(
+                label = stringResource(id = R.string.remember_me),
+                onCheckChanged = {
+                    loginViewModel.updateRememberMe()
+                },
+                isChecked = uiState.remember
+            )
+            Button(
+                onClick = {
+                    scope.launch { loginViewModel.firebaseLogin(context = context) }
+                },
+                enabled = true,
+                shape = RoundedCornerShape(5.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(id = R.string.login))
+            }
+        } else Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 30.dp)
     ) {
-        EmailField(
-            value = uiState.email,
-            onChange = { data -> loginViewModel.updateEmail(data) },
-            modifier = Modifier.fillMaxWidth()
+        CircularProgressIndicator(
+            modifier = Modifier.width(64.dp),
+            color = MaterialTheme.colorScheme.secondary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
         )
-        PasswordField(
-            value = uiState.password,
-            modifier = Modifier.fillMaxWidth(),
-            onChange = { data -> loginViewModel.updatePassword(data) },
-            submit = {
-                scope.launch { loginViewModel.firebaseLogin(context = context) }
-            },
-        )
-        LabelCheckbox(
-            label = stringResource(id = R.string.remember_me),
-            onCheckChanged = {
-                loginViewModel.updateRememberMe()
-            },
-            isChecked = uiState.remember
-        )
-        Button(
-            onClick = {
-                scope.launch { loginViewModel.firebaseLogin(context = context) }
-            },
-            enabled = true,
-            shape = RoundedCornerShape(5.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(id = R.string.login))
-        }
     }
 
 }
