@@ -9,4 +9,6 @@
     <string name="login">Iniciar Sesion</string>
     <string name="form_error">Error de datos ingresados</string>
     <string name="server_error">Error al conectarse con el servidor</string>
+    <string name="next_button">Siguiente</string>
+    <string name="finish_button">Regresar al inicio</string>
 </resources>
