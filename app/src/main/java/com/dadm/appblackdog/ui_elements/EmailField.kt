@@ -1,4 +1,4 @@
-package com.dadm.appblackdog.views
+package com.dadm.appblackdog.ui_elements
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
