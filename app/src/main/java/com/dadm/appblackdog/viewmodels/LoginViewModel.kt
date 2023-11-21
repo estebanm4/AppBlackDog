@@ -22,15 +22,20 @@ class LoginViewModel : ViewModel() {
     val uiState: StateFlow<UiLogin> = _uiState.asStateFlow()
 
     suspend fun firebaseLogin(context: Context) {
-        var success:Boolean = false
+        _uiState.update { state -> state.copy(isLoaderEnable = true) }
+        var success: Boolean = false
         if (validateFields()) {
             success =
                 firebaseService.firebaseAuthentication(data = uiState.value, context = context)
-            Log.d("firebase","actualiza ui $success")
+            Log.d("firebase", "actualiza ui $success")
             if (success) {
                 navigateToMainScreen(context)
                 reset()
-            } else showLoginAlert(context)
+            } else {
+                showLoginAlert(context)
+                _uiState.update { state -> state.copy(isLoaderEnable = false) }
+            }
+
         }
     }
 
@@ -46,7 +51,6 @@ class LoginViewModel : ViewModel() {
         _uiState.update { state -> state.copy(remember = !state.remember) }
     }
 
-    fun showFieldError() {}
     private fun navigateToMainScreen(context: Context) {
         context.startActivity(Intent(context, MainActivity::class.java))
         (context as Activity).finish()
@@ -68,7 +72,8 @@ class LoginViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 email = "",
-                password = ""
+                password = "",
+                isLoaderEnable = false
             )
         }
     }
