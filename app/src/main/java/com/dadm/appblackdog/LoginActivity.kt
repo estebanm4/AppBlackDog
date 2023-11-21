@@ -57,7 +57,18 @@ class LoginActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("test", "onPause")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("test", "onResume")
+    }
 }
+
 
 @Composable
 fun LoginForm() {
