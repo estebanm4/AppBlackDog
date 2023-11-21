@@ -23,7 +23,7 @@ class LoginViewModel : ViewModel() {
 
     suspend fun firebaseLogin(context: Context) {
         _uiState.update { state -> state.copy(isLoaderEnable = true) }
-        var success: Boolean = false
+        val success: Boolean
         if (validateFields()) {
             success =
                 firebaseService.firebaseAuthentication(data = uiState.value, context = context)
