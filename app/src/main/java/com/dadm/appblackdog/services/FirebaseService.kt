@@ -6,6 +6,7 @@ import android.util.Log
 import com.dadm.appblackdog.models.UiLogin
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
@@ -42,7 +43,23 @@ class FirebaseService {
         return isSuccess
     }
 
-    fun userLogOut(){
+    suspend fun addNewUser(email: String, password: String, context: Context):FirebaseUser?{
+        var user:FirebaseUser? = null
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(context as Activity) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(FIREBASE_TAG, "createUserWithEmail:success")
+                    user = auth.currentUser
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(FIREBASE_TAG, "createUserWithEmail:failure", task.exception)
+                }
+            }
+        return user
+    }
+
+    fun userLogOut() {
         auth.signOut().let {
             Log.d(FIREBASE_TAG, "User LogOut")
         }
