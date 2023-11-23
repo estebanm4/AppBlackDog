@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class LoginViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(UiLogin())
     private val firebaseService = FirebaseService()
+    private val _uiState = MutableStateFlow(UiLogin())
     val uiState: StateFlow<UiLogin> = _uiState.asStateFlow()
 
     suspend fun firebaseLogin(context: Context) {

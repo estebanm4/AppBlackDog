@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ import com.dadm.appblackdog.ui_elements.EmailField
 import com.dadm.appblackdog.ui_elements.LabelCheckbox
 import com.dadm.appblackdog.ui_elements.PasswordField
 import com.dadm.appblackdog.viewmodels.LoginViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @Composable
