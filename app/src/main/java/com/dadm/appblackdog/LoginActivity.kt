@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.dadm.appblackdog.screens.LoginForm
+import com.dadm.appblackdog.screens.LoginFormScreen
 import com.dadm.appblackdog.ui.theme.AppBlackDogTheme
 
 class LoginActivity : ComponentActivity() {
@@ -20,7 +20,7 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginForm()
+                    LoginFormScreen()
                 }
             }
         }

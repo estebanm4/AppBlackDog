@@ -9,12 +9,16 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.dadm.appblackdog.MainActivity
 import com.dadm.appblackdog.R
-import com.dadm.appblackdog.objects.UiLogin
+import com.dadm.appblackdog.models.Pet
+import com.dadm.appblackdog.models.UiLogin
 import com.dadm.appblackdog.services.FirebaseService
+import com.dadm.appblackdog.utils.Constants
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.Date
 
 class LoginViewModel : ViewModel() {
     private val firebaseService = FirebaseService()
@@ -26,10 +30,10 @@ class LoginViewModel : ViewModel() {
         val success: Boolean
         if (validateFields()) {
             success =
-                firebaseService.firebaseAuthentication(data = uiState.value, context = context)
+                firebaseService.emailLogin(data = uiState.value, context = context)
             Log.d("firebase", "actualiza ui $success")
             if (success) {
-                navigateToMainScreen(context)
+//                navigateToMainScreen(context)
                 reset()
             } else {
                 showLoginAlert(context)
@@ -77,4 +81,46 @@ class LoginViewModel : ViewModel() {
             )
         }
     }
+
+    /** firestore test  */
+    val newPet = Pet(
+        name = "Zeus",
+        ownerId = "PJBR1Iv9bAynz8BPrZN7",
+        photoUrl = "https://static.wikia.nocookie.net/gintama/images/4/48/Sadaharu_mug.jpg/revision/latest?cb=20110921172540&path-prefix=es",
+        ageRangeId = "KmzEyURfDZUUt20Em98P",
+        description = "Perro entrenado para la vigilancia",
+        raceId = "ogqf0kmEScHtnkyPITal",
+        weight = 20f,
+        measureUnitId = "iJL1wiaVcdokjckQFCRM",
+        birthdate = Timestamp(Date(1353707011000))
+    )
+
+    suspend fun getData() {
+        firebaseService.getData(Constants.PET_TABLE_NAME)
+    }
+
+    suspend fun sendData() {
+
+        firebaseService.setData(reference = Constants.PET_TABLE_NAME, data = newPet)
+    }
+
+    suspend fun updateData() {
+        firebaseService.updateData(
+            reference = Constants.PET_TABLE_NAME,
+            itemId = "YYxT2q1VTY2bmZKuHutg",
+            argument = "description",
+            value = "perro para cuidado de niños"
+        )
+    }
+
+    suspend fun getDataByArgument() {
+        firebaseService.getDataByArgument(
+            reference = Constants.MEASURE_UNIT_TABLE_NAME,
+            argument = "type",
+            value = "peso"
+        )
+        firebaseService.userLogOut()
+    }
+
+
 }

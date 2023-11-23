@@ -31,7 +31,7 @@ import com.dadm.appblackdog.viewmodels.LoginViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginForm(
+fun LoginFormScreen(
     loginViewModel: LoginViewModel = viewModel()
 ) {
 
@@ -80,6 +80,16 @@ fun LoginForm(
             ) {
                 Text(stringResource(id = R.string.login))
             }
+            Button(
+                onClick = {
+                    scope.launch { loginViewModel.getDataByArgument() }
+                },
+                enabled = true,
+                shape = RoundedCornerShape(5.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("testing firestore")
+            }
         } else Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -100,6 +110,6 @@ fun LoginForm(
 @Composable
 fun LoginFormPreview() {
     AppBlackDogTheme {
-        LoginForm()
+        LoginFormScreen()
     }
 }
