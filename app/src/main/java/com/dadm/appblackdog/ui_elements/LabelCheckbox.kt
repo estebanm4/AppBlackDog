@@ -1,4 +1,4 @@
-package com.dadm.appblackdog.views
+package com.dadm.appblackdog.ui_elements
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
