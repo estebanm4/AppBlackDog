@@ -1,14 +1,19 @@
 package com.dadm.appblackdog.models
 
-import com.google.firebase.Timestamp
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.dadm.appblackdog.utils.Constants
 
+@Entity(tableName = Constants.OWNER_TABLE_NAME)
 data class Owner(
-    val id: String? = null,
-    val name: String? = null,
-    val lastname: String? = null,
-    val email: String? = null,
-    val photoUrl: String? = null,
-    val birthdate: Timestamp? = null,
-    val hasPets: Boolean? = null,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val serverId: String = "",
+    val name: String = "",
+    val lastname: String = "",
+    val email: String = "",
+    val photoUrl: String = "",
+    val birthdate: Long = 0,
+    val hasPets: Boolean = false,
 ) {
 }

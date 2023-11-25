@@ -8,6 +8,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
@@ -31,10 +33,10 @@ class FirebaseService {
                 .addOnCompleteListener(context as Activity) { task ->
                     isSuccess = task.isSuccessful
                     if (task.isSuccessful) {
-                        Log.d(FIREBASE_TAG, "signInWithEmail:success")
+                        Log.d(FIREBASE_TAG, "auth result: success")
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(FIREBASE_TAG, "signInWithEmail:failure", task.exception)
+                        Log.w(FIREBASE_TAG, "auth result: failure", task.exception)
                     }
                 }.await()
         } catch (e: Exception) {
@@ -43,8 +45,8 @@ class FirebaseService {
         return isSuccess
     }
 
-    suspend fun addNewUser(email: String, password: String, context: Context):FirebaseUser?{
-        var user:FirebaseUser? = null
+    suspend fun addNewUser(email: String, password: String, context: Context): FirebaseUser? {
+        var user: FirebaseUser? = null
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(context as Activity) { task ->
                 if (task.isSuccessful) {
@@ -104,17 +106,21 @@ class FirebaseService {
         }
     }
 
-    suspend fun getData(reference: String) {
+    suspend fun getData(reference: String): List<Any> {
+        var data: List<QueryDocumentSnapshot> = listOf()
         Log.d(FIREBASE_TAG, "inicio de query $reference...")
         try {
             db.collection(reference)
                 .get()
                 .addOnSuccessListener { result ->
-
+                    data = result.toList()
                     if (result != null)
-                        for (document in result) {
-                            Log.d(FIREBASE_TAG, "id ${document?.id} => ${document?.data}")
+                        result.map {
+                            Log.d(FIREBASE_TAG, "id ${it?.id} => ${it?.data}")
                         }
+//                        for (document in result) {
+//                            Log.d(FIREBASE_TAG, "id ${document?.id} => ${document?.data}")
+//                        }
                     else Log.e(FIREBASE_TAG, "data from server is null")
 
                 }
@@ -124,6 +130,7 @@ class FirebaseService {
         } catch (e: Exception) {
             Log.e(FIREBASE_TAG, "fatal error $e")
         }
+        return data
     }
 
     suspend fun getDataByArgument(reference: String, argument: String, value: Any) {

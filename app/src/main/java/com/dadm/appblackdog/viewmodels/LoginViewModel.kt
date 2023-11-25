@@ -3,44 +3,66 @@ package com.dadm.appblackdog.viewmodels
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.dadm.appblackdog.MainActivity
 import com.dadm.appblackdog.R
+import com.dadm.appblackdog.database.data.AgeRangeRepository
+import com.dadm.appblackdog.database.data.OwnerRepository
+import com.dadm.appblackdog.models.Owner
 import com.dadm.appblackdog.models.Pet
 import com.dadm.appblackdog.models.UiLogin
 import com.dadm.appblackdog.services.FirebaseService
 import com.dadm.appblackdog.utils.Constants
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Date
 
-class LoginViewModel : ViewModel() {
-    private val firebaseService = FirebaseService()
+class LoginViewModel(
+    private val ownerRepository: OwnerRepository,
+    private val firebaseService: FirebaseService,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(UiLogin())
     val uiState: StateFlow<UiLogin> = _uiState.asStateFlow()
 
-    suspend fun firebaseLogin(context: Context) {
-        _uiState.update { state -> state.copy(isLoaderEnable = true) }
-        val success: Boolean
+    /** start user login*/
+    suspend fun login(context: Context) = coroutineScope {
+        // first validate form
         if (validateFields()) {
-            success =
-                firebaseService.emailLogin(data = uiState.value, context = context)
-            Log.d("firebase", "actualiza ui $success")
-            if (success) {
-//                navigateToMainScreen(context)
+            //if form is valid start login
+            // enabled loader
+            showLoader(true)
+            // start background process
+
+            // auth firebase
+            val firebaseJob = async(Dispatchers.IO) { firebaseLogin(context) }.await()
+
+            // update UI
+            if (firebaseJob) {
+                // when all task is ok, start navigation to main screen
+                navigateToMainScreen(context)
+                // reset data in viewModel
                 reset()
             } else {
+                // Notify the user the cause of login error
                 showLoginAlert(context)
-                _uiState.update { state -> state.copy(isLoaderEnable = false) }
+                // disabled loader
+                showLoader(false)
             }
-
         }
+//        throw AssertionError("login error")
+    }
+
+    /** auth in firebase */
+    private suspend fun firebaseLogin(context: Context): Boolean {
+        return firebaseService.emailLogin(data = uiState.value, context = context)
     }
 
     fun updateEmail(data: String) {
@@ -68,6 +90,10 @@ class LoginViewModel : ViewModel() {
         ).show()
     }
 
+    private fun showLoader(show: Boolean) {
+        _uiState.update { state -> state.copy(isLoaderEnable = show) }
+    }
+
     private fun validateFields(): Boolean {
         return uiState.value.email.isNotEmpty() && uiState.value.password.isNotEmpty()
     }
@@ -83,7 +109,7 @@ class LoginViewModel : ViewModel() {
     }
 
     /** firestore test  */
-    val newPet = Pet(
+    private val newPet = Pet(
         name = "Zeus",
         ownerId = "PJBR1Iv9bAynz8BPrZN7",
         photoUrl = "https://static.wikia.nocookie.net/gintama/images/4/48/Sadaharu_mug.jpg/revision/latest?cb=20110921172540&path-prefix=es",
@@ -120,6 +146,19 @@ class LoginViewModel : ViewModel() {
             value = "peso"
         )
         firebaseService.userLogOut()
+    }
+
+    suspend fun saveItem() {
+
+        val newOwner = Owner(
+            name = "cristian",
+            lastname = "santamaria",
+            birthdate = 1000,
+            hasPets = false,
+            email = "test@test.com"
+        )
+        ownerRepository.insertOwner(newOwner)
+
     }
 
 

@@ -27,12 +27,13 @@ import com.dadm.appblackdog.ui.theme.AppBlackDogTheme
 import com.dadm.appblackdog.ui_elements.EmailField
 import com.dadm.appblackdog.ui_elements.LabelCheckbox
 import com.dadm.appblackdog.ui_elements.PasswordField
+import com.dadm.appblackdog.viewmodels.AppViewModelProvider
 import com.dadm.appblackdog.viewmodels.LoginViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginFormScreen(
-    loginViewModel: LoginViewModel = viewModel()
+    loginViewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     //variables
@@ -59,7 +60,7 @@ fun LoginFormScreen(
                 onChange = { data -> loginViewModel.updatePassword(data) },
                 submit = {
                     scope.launch {
-                        loginViewModel.firebaseLogin(context = context)
+                        loginViewModel.login(context = context)
                     }
                 },
             )
@@ -72,7 +73,9 @@ fun LoginFormScreen(
             )
             Button(
                 onClick = {
-                    scope.launch { loginViewModel.firebaseLogin(context = context) }
+                    scope.launch {
+                        loginViewModel.login(context = context)
+                    }
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
@@ -82,7 +85,7 @@ fun LoginFormScreen(
             }
             Button(
                 onClick = {
-                    scope.launch { loginViewModel.getDataByArgument() }
+                    scope.launch { loginViewModel.saveItem() }
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),

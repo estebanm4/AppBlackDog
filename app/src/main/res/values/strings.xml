@@ -12,4 +12,7 @@
     <string name="next_button">Siguiente</string>
     <string name="start_button">Iniciar</string>
     <string name="finish_button">Regresar al inicio</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <string name="default_description">image</string>
 </resources>
