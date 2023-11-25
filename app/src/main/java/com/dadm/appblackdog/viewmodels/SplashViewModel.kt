@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SplashViewModel(
     private val ageRangeRepository: AgeRangeRepository,
@@ -33,25 +34,29 @@ class SplashViewModel(
     private val measureUnitRepository: MeasureUnitRepository,
     private val firebaseService: FirebaseService,
 ) : ViewModel() {
+
+    private var loadIsRun = false
     private val _uiState = MutableStateFlow(UiSplash())
     val uiState: StateFlow<UiSplash> = _uiState.asStateFlow()
-    var updateData = true
 
     fun init() {
-        Log.d(GENERIC_TAG, "init *************")
-        _uiState.update { ui -> ui.copy( navigate = false) }
-        if (updateData) viewModelScope.launch { loadDataFromServer() }
-        updateData = false
+        if (!loadIsRun) {
+            Log.d(GENERIC_TAG, "init *************")
+            loadIsRun = true
+            _uiState.update { ui -> ui.copy(navigate = false) }
+            viewModelScope.launch { loadDataFromServer() }
+        }
     }
 
     /** load common data from server*/
     private suspend fun loadDataFromServer() = coroutineScope {
         Log.d(GENERIC_TAG, "load data *************")
-        val ageRangeSuccess = async(Dispatchers.IO) { getAndSaveAgeRanges() }.await()
-        val breedSuccess = async(Dispatchers.IO) { getAndSaveBreeds() }.await()
-        val measureUnitSuccess = async(Dispatchers.IO) { getAndSaveMeasureUnits() }.await()
-        if (ageRangeSuccess && breedSuccess && measureUnitSuccess)
+        launch(Dispatchers.IO) { getAndSaveAgeRanges() }
+        launch(Dispatchers.IO) { getAndSaveBreeds() }
+        launch(Dispatchers.IO) { getAndSaveMeasureUnits() }
+        withContext(Dispatchers.Main) {
             _uiState.update { ui -> ui.copy(navigate = true) }
+        }
     }
 
     /** age ranges server and db process */
@@ -143,7 +148,7 @@ class SplashViewModel(
         Log.d(GENERIC_TAG, "start navigation *********************")
         if (isUserLogin()) navigateToDashboard(context)
         else navigateToLogin(context)
-//        updateData = true
+        loadIsRun = false
     }
 
     private fun isUserLogin(): Boolean = false
