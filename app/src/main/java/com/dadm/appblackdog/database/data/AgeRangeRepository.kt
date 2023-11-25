@@ -10,7 +10,7 @@ interface AgeRangeRepository {
     fun getAgeRangeStream(id: Int): Flow<AgeRange?>
 
     suspend fun insertAgeRange(data: AgeRange)
-    suspend fun insertMultipleAgeRange(data: List<AgeRange>)
+    suspend fun insertMultipleAgeRange(data: List<AgeRange>, update: Boolean = true)
 
     suspend fun deleteAgeRange(data: AgeRange)
 

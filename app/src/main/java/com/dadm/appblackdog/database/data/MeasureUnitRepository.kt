@@ -1,7 +1,7 @@
 package com.dadm.appblackdog.database.data
 
 import android.util.Log
-import com.dadm.appblackdog.models.AgeRange
+import com.dadm.appblackdog.models.MeasureUnit
 import com.dadm.appblackdog.services.GENERIC_TAG
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -9,18 +9,27 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class AgeRangeOfflineRepository(private val dao: AgeRangeDao) : AgeRangeRepository {
-    /** get all items in table */
-    override fun getAllAgeRangeStream(): Flow<List<AgeRange>> = dao.getAllItems()
+interface MeasureUnitRepository {
+    fun getAllMeasureUnitStream(): Flow<List<MeasureUnit>>
 
-    /** get an item from table*/
-    override fun getAgeRangeStream(id: Int): Flow<AgeRange?> = dao.getItem(id)
+    fun getMeasureUnitStream(id: Int): Flow<MeasureUnit?>
 
-    /** add one item*/
-    override suspend fun insertAgeRange(data: AgeRange) = dao.insert(data)
+    suspend fun insertMeasureUnit(data: MeasureUnit)
+    suspend fun insertMultipleMeasureUnit(data: List<MeasureUnit>, update: Boolean = true)
 
-    /** add multiple items*/
-    override suspend fun insertMultipleAgeRange(data: List<AgeRange>, update: Boolean) {
+    suspend fun deleteMeasureUnit(data: MeasureUnit)
+
+    suspend fun updateMeasureUnit(data: MeasureUnit)
+}
+
+class MeasureUnitOfflineRepository(private val dao: MeasureUnitDao) : MeasureUnitRepository {
+    override fun getAllMeasureUnitStream(): Flow<List<MeasureUnit>> = dao.getAllItems()
+
+    override fun getMeasureUnitStream(id: Int): Flow<MeasureUnit?> = dao.getItem(id)
+
+    override suspend fun insertMeasureUnit(data: MeasureUnit) = dao.insert(data)
+
+    override suspend fun insertMultipleMeasureUnit(data: List<MeasureUnit>, update: Boolean) {
         // counts for actions in db
         var newData = 0
         var updateData = 0
@@ -47,9 +56,9 @@ class AgeRangeOfflineRepository(private val dao: AgeRangeDao) : AgeRangeReposito
         }
     }
 
-    /** delete item*/
-    override suspend fun deleteAgeRange(data: AgeRange) = dao.delete(data)
+    override suspend fun deleteMeasureUnit(data: MeasureUnit) = dao.delete(data)
 
-    /** update item*/
-    override suspend fun updateAgeRange(data: AgeRange) = dao.update(data)
+    override suspend fun updateMeasureUnit(data: MeasureUnit) = dao.update(data)
+
+
 }

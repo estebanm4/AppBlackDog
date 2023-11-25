@@ -9,40 +9,63 @@ import androidx.lifecycle.viewModelScope
 import com.dadm.appblackdog.LoginActivity
 import com.dadm.appblackdog.MainActivity
 import com.dadm.appblackdog.database.data.AgeRangeRepository
+import com.dadm.appblackdog.database.data.BreedRepository
+import com.dadm.appblackdog.database.data.MeasureUnitRepository
 import com.dadm.appblackdog.models.AgeRange
-import com.dadm.appblackdog.services.FIREBASE_TAG
+import com.dadm.appblackdog.models.Breed
+import com.dadm.appblackdog.models.MeasureUnit
+import com.dadm.appblackdog.models.UiSplash
+import com.dadm.appblackdog.services.GENERIC_TAG
 import com.dadm.appblackdog.services.FirebaseService
 import com.dadm.appblackdog.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val ageRangeRepository: AgeRangeRepository,
+    private val breedRepository: BreedRepository,
+    private val measureUnitRepository: MeasureUnitRepository,
     private val firebaseService: FirebaseService,
 ) : ViewModel() {
-
+    private val _uiState = MutableStateFlow(UiSplash())
+    val uiState: StateFlow<UiSplash> = _uiState.asStateFlow()
+    var updateData = true
 
     fun init() {
-        Log.d(FIREBASE_TAG, "init *************")
-        viewModelScope.launch { loadDataFromServer() }
+        Log.d(GENERIC_TAG, "init *************")
+        if (updateData) viewModelScope.launch { loadDataFromServer() }
+        updateData = false
+        _uiState.update { ui -> ui.copy( navigate = false) }
     }
 
     /** load common data from server*/
     private suspend fun loadDataFromServer() = coroutineScope {
-        //variables
-        val ageRangeList = mutableListOf<AgeRange>()
-        // get age ranges
-        val ageRanges =
-            async(Dispatchers.IO) { firebaseService.getData(Constants.AGE_RANGES_TABLE_NAME) }.await()
-        Log.d(FIREBASE_TAG, "rangos de edad desde el servidor: ${ageRanges.size}")
+        Log.d(GENERIC_TAG, "load data *************")
+        val ageRangeSuccess = async(Dispatchers.IO) { getAndSaveAgeRanges() }.await()
+        val breedSuccess = async(Dispatchers.IO) { getAndSaveBreeds() }.await()
+        val measureUnitSuccess = async(Dispatchers.IO) { getAndSaveMeasureUnits() }.await()
+        if (ageRangeSuccess && breedSuccess && measureUnitSuccess)
+            _uiState.update { ui -> ui.copy(navigate = true) }
+    }
 
+    /** age ranges server and db process */
+    private suspend fun getAndSaveAgeRanges(): Boolean {
+        //variables
+        val ageRangeSaveList = mutableListOf<AgeRange>()
+        var success = false
+        // get age ranges
+        val ageRanges = firebaseService.getData(Constants.AGE_RANGES_TABLE_NAME)
+        Log.d(GENERIC_TAG, "rangos de edad desde el servidor: ${ageRanges.size}")
         // when server return data generate a valid list to send to db
         if (ageRanges.isNotEmpty())
             ageRanges.map {
-                val data = it.data
-                ageRangeList.add(
+                ageRangeSaveList.add(
                     AgeRange(
                         serverId = it.id,
                         max = (it.data["max"] as Long? ?: 0).toInt(),
@@ -52,20 +75,85 @@ class SplashViewModel(
                 )
             }
         // save agesRanges in db
-        if (ageRangeList.isNotEmpty()) {
-            val save = async { ageRangeRepository.insertMultipleAgeRange(ageRangeList) }
-            Log.d(FIREBASE_TAG, "Age ranged saved: ${ageRangeList.size}")
+        if (ageRangeSaveList.isNotEmpty()) {
+            ageRangeRepository.insertMultipleAgeRange(data = ageRangeSaveList)
+            success = true
         }
-
+        return success
     }
 
-    fun navigateToLogin(context: Context) {
+    /** breeds server and db process */
+    private suspend fun getAndSaveBreeds(): Boolean {
+        //variables
+        val breedsSaveList = mutableListOf<Breed>()
+        var success = false
+        // get age ranges
+        val breeds = firebaseService.getData(Constants.BREEDS_TABLE_NAME)
+        Log.d(GENERIC_TAG, "rangos de edad desde el servidor: ${breeds.size}")
+        // when server return data generate a valid list to send to db
+        if (breeds.isNotEmpty())
+            breeds.map {
+                breedsSaveList.add(
+                    Breed(
+                        serverId = it.id,
+                        name = it.data["name"] as String? ?: "",
+                        small = it.data["small"] as Boolean? ?: false,
+                    )
+                )
+            }
+        // save agesRanges in db
+        if (breedsSaveList.isNotEmpty()) {
+            breedRepository.insertMultipleBreed(data = breedsSaveList)
+            success = true
+        }
+        return success
+    }
+
+    /** measure units server and db process */
+    private suspend fun getAndSaveMeasureUnits(): Boolean {
+        //variables
+        val measureUnitSaveList = mutableListOf<MeasureUnit>()
+        var success = false
+        // get age ranges
+        val measureUnits = firebaseService.getData(Constants.MEASURE_UNIT_TABLE_NAME)
+        Log.d(GENERIC_TAG, "unidades de medida desde el servidor: ${measureUnits.size}")
+        // when server return data generate a valid list to send to db
+        if (measureUnits.isNotEmpty())
+            measureUnits.map {
+                measureUnitSaveList.add(
+                    MeasureUnit(
+                        serverId = it.id,
+                        name = it.data["name"] as String? ?: "",
+                        abr = it.data["abr"] as String? ?: "",
+                        type = it.data["type"] as String? ?: "",
+                        conversion = (it.data["conversion"] as String? ?: "0").toDouble(),
+                        parent = it.data["parent"] as Boolean? ?: false,
+                    )
+                )
+            }
+        // save agesRanges in db
+        if (measureUnitSaveList.isNotEmpty()) {
+            measureUnitRepository.insertMultipleMeasureUnit(data = measureUnitSaveList)
+            success = true
+        }
+        return success
+    }
+
+    fun navigateToScreen(context: Context) {
+        Log.d(GENERIC_TAG, "start navigation *********************")
+        if (isUserLogin()) navigateToDashboard(context)
+        else navigateToLogin(context)
+//        updateData = true
+    }
+
+    private fun isUserLogin(): Boolean = false
+    private fun navigateToLogin(context: Context) {
 //        val context = LocalContext.current
         context.startActivity(Intent(context, LoginActivity::class.java))
         (context as Activity).finish()
     }
 
-    fun navigateToDashboard(context: Context) {
+    private fun navigateToDashboard(context: Context) {
         context.startActivity(Intent(context, MainActivity::class.java))
         (context as Activity).finish()
     }

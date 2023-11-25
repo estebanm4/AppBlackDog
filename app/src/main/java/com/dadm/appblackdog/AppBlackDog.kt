@@ -1,8 +1,6 @@
 package com.dadm.appblackdog
 
 import android.app.Application
-import com.dadm.appblackdog.database.AppContainer
-import com.dadm.appblackdog.database.AppDataContainer
 
 class AppBlackDog: Application() {
     /**

@@ -9,12 +9,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
 
-const val FIREBASE_TAG: String = "firebase"
+const val GENERIC_TAG: String = "blackdog"
 
 class FirebaseService {
 
@@ -33,14 +32,14 @@ class FirebaseService {
                 .addOnCompleteListener(context as Activity) { task ->
                     isSuccess = task.isSuccessful
                     if (task.isSuccessful) {
-                        Log.d(FIREBASE_TAG, "auth result: success")
+                        Log.d(GENERIC_TAG, "auth result: success")
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(FIREBASE_TAG, "auth result: failure", task.exception)
+                        Log.w(GENERIC_TAG, "auth result: failure", task.exception)
                     }
                 }.await()
         } catch (e: Exception) {
-            Log.e(FIREBASE_TAG, "fatal error $e")
+            Log.e(GENERIC_TAG, "fatal error $e")
         }
         return isSuccess
     }
@@ -51,11 +50,11 @@ class FirebaseService {
             .addOnCompleteListener(context as Activity) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(FIREBASE_TAG, "createUserWithEmail:success")
+                    Log.d(GENERIC_TAG, "createUserWithEmail:success")
                     user = auth.currentUser
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(FIREBASE_TAG, "createUserWithEmail:failure", task.exception)
+                    Log.w(GENERIC_TAG, "createUserWithEmail:failure", task.exception)
                 }
             }
         return user
@@ -63,7 +62,7 @@ class FirebaseService {
 
     fun userLogOut() {
         auth.signOut().let {
-            Log.d(FIREBASE_TAG, "User LogOut")
+            Log.d(GENERIC_TAG, "User LogOut")
         }
     }
 
@@ -72,17 +71,17 @@ class FirebaseService {
             db.collection(reference).document()
                 .set(data)
                 .addOnSuccessListener {
-                    Log.d(FIREBASE_TAG, "DocumentSnapshot successfully written!")
+                    Log.d(GENERIC_TAG, "DocumentSnapshot successfully written!")
                 }
                 .addOnFailureListener { e ->
                     Log.w(
-                        FIREBASE_TAG,
+                        GENERIC_TAG,
                         "Error writing document",
                         e
                     )
                 }.await()
         } catch (e: Exception) {
-            Log.e(FIREBASE_TAG, "fatal error $e")
+            Log.e(GENERIC_TAG, "fatal error $e")
         }
 
     }
@@ -94,21 +93,21 @@ class FirebaseService {
                 .document(itemId).update(argument, value)
                 .addOnSuccessListener {
                     Log.d(
-                        FIREBASE_TAG,
+                        GENERIC_TAG,
                         "DocumentSnapshot successfully updated!"
                     )
                 }
                 .addOnFailureListener { e ->
-                    Log.w(FIREBASE_TAG, "Error updating document", e)
+                    Log.w(GENERIC_TAG, "Error updating document", e)
                 }.await()
         } catch (e: Exception) {
-            Log.e(FIREBASE_TAG, "fatal error $e")
+            Log.e(GENERIC_TAG, "fatal error $e")
         }
     }
 
     suspend fun getData(reference: String): List<QueryDocumentSnapshot> {
         var data: List<QueryDocumentSnapshot> = listOf()
-        Log.d(FIREBASE_TAG, "inicio de query $reference...")
+        Log.d(GENERIC_TAG, "inicio de query $reference...")
         try {
             db.collection(reference)
                 .get()
@@ -116,16 +115,16 @@ class FirebaseService {
                     data = result.toList()
                     if (result != null)
                         result.map {
-                            Log.d(FIREBASE_TAG, "id ${it?.id} => ${it?.data}")
+                            Log.d(GENERIC_TAG, "id ${it?.id} => ${it?.data}")
                         }
-                    else Log.e(FIREBASE_TAG, "data from server is null")
+                    else Log.e(GENERIC_TAG, "data from server is null")
 
                 }
                 .addOnFailureListener { exception ->
-                    Log.d(FIREBASE_TAG, "Error getting documents: ", exception)
+                    Log.d(GENERIC_TAG, "Error getting documents: ", exception)
                 }.await()
         } catch (e: Exception) {
-            Log.e(FIREBASE_TAG, "fatal error $e")
+            Log.e(GENERIC_TAG, "fatal error $e")
         }
         return data
     }
@@ -138,15 +137,15 @@ class FirebaseService {
                 .addOnSuccessListener { result ->
                     if (result != null)
                         for (document in result) {
-                            Log.d(FIREBASE_TAG, "id ${document?.id} => ${document?.data}")
+                            Log.d(GENERIC_TAG, "id ${document?.id} => ${document?.data}")
                         }
-                    else Log.e(FIREBASE_TAG, "data from server is null")
+                    else Log.e(GENERIC_TAG, "data from server is null")
                 }
                 .addOnFailureListener { exception ->
-                    Log.w(FIREBASE_TAG, "Error getting documents: ", exception)
+                    Log.w(GENERIC_TAG, "Error getting documents: ", exception)
                 }.await()
         } catch (e: Exception) {
-            Log.e(FIREBASE_TAG, "fatal error $e")
+            Log.e(GENERIC_TAG, "fatal error $e")
         }
     }
 

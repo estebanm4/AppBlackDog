@@ -1,7 +1,7 @@
 package com.dadm.appblackdog.database.data
 
 import android.util.Log
-import com.dadm.appblackdog.models.AgeRange
+import com.dadm.appblackdog.models.Breed
 import com.dadm.appblackdog.services.GENERIC_TAG
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -9,18 +9,27 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class AgeRangeOfflineRepository(private val dao: AgeRangeDao) : AgeRangeRepository {
-    /** get all items in table */
-    override fun getAllAgeRangeStream(): Flow<List<AgeRange>> = dao.getAllItems()
+interface BreedRepository {
+    fun getAllBreedStream(): Flow<List<Breed>>
 
-    /** get an item from table*/
-    override fun getAgeRangeStream(id: Int): Flow<AgeRange?> = dao.getItem(id)
+    fun getBreedStream(id: Int): Flow<Breed?>
 
-    /** add one item*/
-    override suspend fun insertAgeRange(data: AgeRange) = dao.insert(data)
+    suspend fun insertBreed(data: Breed)
+    suspend fun insertMultipleBreed(data: List<Breed>, update: Boolean = true)
 
-    /** add multiple items*/
-    override suspend fun insertMultipleAgeRange(data: List<AgeRange>, update: Boolean) {
+    suspend fun deleteBreed(data: Breed)
+
+    suspend fun updateBreed(data: Breed)
+}
+
+class BreedOfflineRepository(private val dao: BreedDao): BreedRepository{
+    override fun getAllBreedStream(): Flow<List<Breed>> = dao.getAllItems()
+
+    override fun getBreedStream(id: Int): Flow<Breed?> = dao.getItem(id)
+
+    override suspend fun insertBreed(data: Breed) = dao.insert(data)
+
+    override suspend fun insertMultipleBreed(data: List<Breed>, update: Boolean) {
         // counts for actions in db
         var newData = 0
         var updateData = 0
@@ -47,9 +56,8 @@ class AgeRangeOfflineRepository(private val dao: AgeRangeDao) : AgeRangeReposito
         }
     }
 
-    /** delete item*/
-    override suspend fun deleteAgeRange(data: AgeRange) = dao.delete(data)
+    override suspend fun deleteBreed(data: Breed) = dao.delete(data)
 
-    /** update item*/
-    override suspend fun updateAgeRange(data: AgeRange) = dao.update(data)
+    override suspend fun updateBreed(data: Breed) = dao.update(data)
+
 }

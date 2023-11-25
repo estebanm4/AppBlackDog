@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,9 +30,16 @@ import kotlinx.coroutines.launch
 fun SplashScreen(
     splashViewModel: SplashViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val scope = rememberCoroutineScope()
-    splashViewModel.init()
+    val uiState by splashViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
+    if (splashViewModel.updateData) {
+        splashViewModel.init()
+    }
+
+    if (uiState.navigate) {
+        splashViewModel.navigateToScreen(context)
+    }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
