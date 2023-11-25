@@ -29,6 +29,7 @@ class LoginViewModel(
     private val ownerRepository: OwnerRepository,
     private val firebaseService: FirebaseService,
 ) : ViewModel() {
+    //variables
     private val _uiState = MutableStateFlow(UiLogin())
     val uiState: StateFlow<UiLogin> = _uiState.asStateFlow()
 
@@ -120,16 +121,13 @@ class LoginViewModel(
         measureUnitId = "iJL1wiaVcdokjckQFCRM",
         birthdate = Timestamp(Date(1353707011000))
     )
-
     suspend fun getData() {
         firebaseService.getData(Constants.PET_TABLE_NAME)
     }
-
     suspend fun sendData() {
 
         firebaseService.setData(reference = Constants.PET_TABLE_NAME, data = newPet)
     }
-
     suspend fun updateData() {
         firebaseService.updateData(
             reference = Constants.PET_TABLE_NAME,
@@ -138,7 +136,6 @@ class LoginViewModel(
             value = "perro para cuidado de niños"
         )
     }
-
     suspend fun getDataByArgument() {
         firebaseService.getDataByArgument(
             reference = Constants.MEASURE_UNIT_TABLE_NAME,
@@ -147,19 +144,4 @@ class LoginViewModel(
         )
         firebaseService.userLogOut()
     }
-
-    suspend fun saveItem() {
-
-        val newOwner = Owner(
-            name = "cristian",
-            lastname = "santamaria",
-            birthdate = 1000,
-            hasPets = false,
-            email = "test@test.com"
-        )
-        ownerRepository.insertOwner(newOwner)
-
-    }
-
-
 }

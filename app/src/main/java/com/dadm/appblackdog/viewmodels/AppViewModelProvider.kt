@@ -18,7 +18,7 @@ object AppViewModelProvider {
             LoginViewModel(
                 ownerRepository = inventoryApplication().container.ownerRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
-                )
+            )
         }
 
 
@@ -28,6 +28,13 @@ object AppViewModelProvider {
                 ageRangeRepository = inventoryApplication().container.ageRangeRepository,
                 breedRepository = inventoryApplication().container.breedRepository,
                 measureUnitRepository = inventoryApplication().container.measureUnitRepository,
+                firebaseService = inventoryApplication().container.firebaseService,
+            )
+        }
+
+        initializer {
+            RegisterViewModel(
+                ownerRepository = inventoryApplication().container.ownerRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }

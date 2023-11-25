@@ -1,18 +1,36 @@
 <resources>
     <string name="app_name">AppBlackDog</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <!-- login an register-->
     <string name="email_label">Email</string>
     <string name="email_placeholder">Ingrese su email</string>
     <string name="password_label">Contraseña</string>
     <string name="password_placeholder">Ingrese su Contraseña</string>
+    <string name="validated_password">Confirmar Contraseña</string>
     <string name="remember_me">Recordarme</string>
     <string name="login">Iniciar Sesion</string>
+    <string name="register_title">Nuevo Usuario</string>
+    <string name="invalid_email">Email no valido</string>
+    <string name="invalid_password">La contraseña es muy corta</string>
+    <string name="invalid_password_confirm">La contraseña no coincide</string>
+<!--    common use-->
+    <string name="name">Nombre</string>
+    <string name="lastname">Apellido</string>
+    <string name="required_field">Campo obligatorio</string>
+    <string name="required">Obligatorio</string>
+
+
+    <!--    server messages-->
     <string name="form_error">Error de datos ingresados</string>
     <string name="server_error">Error al conectarse con el servidor</string>
+    <!--    buttons-->
     <string name="next_button">Siguiente</string>
     <string name="start_button">Iniciar</string>
+    <string name="cancel">Cancelar</string>
     <string name="finish_button">Regresar al inicio</string>
-    <string name="title_activity_splash">SplashActivity</string>
+    <string name="create_user">Crear</string>
 
     <string name="default_description">image</string>
 </resources>

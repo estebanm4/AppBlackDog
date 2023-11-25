@@ -13,7 +13,6 @@ data class Owner(
     val lastname: String = "",
     val email: String = "",
     val photoUrl: String = "",
-    val birthdate: Long = 0,
     val hasPets: Boolean = false,
 ) {
 }

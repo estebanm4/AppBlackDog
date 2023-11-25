@@ -39,9 +39,9 @@ class SplashViewModel(
 
     fun init() {
         Log.d(GENERIC_TAG, "init *************")
+        _uiState.update { ui -> ui.copy( navigate = false) }
         if (updateData) viewModelScope.launch { loadDataFromServer() }
         updateData = false
-        _uiState.update { ui -> ui.copy( navigate = false) }
     }
 
     /** load common data from server*/
