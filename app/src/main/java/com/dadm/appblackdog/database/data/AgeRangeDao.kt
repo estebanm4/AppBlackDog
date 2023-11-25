@@ -25,4 +25,8 @@ interface AgeRangeDao {
 
     @Query("SELECT * from ageRanges ORDER BY max ASC")
     fun getAllItems(): Flow<List<AgeRange>>
+    @Query("SELECT COUNT() from ageRanges WHERE serverId = :serverId ")
+    fun checkItemByServerId(serverId:String): Flow<Int>
+    @Query("SELECT id from ageRanges WHERE serverId = :serverId ")
+    fun getItemId(serverId:String): Flow<Int>
 }

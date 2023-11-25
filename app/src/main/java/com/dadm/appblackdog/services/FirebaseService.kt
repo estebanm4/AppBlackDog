@@ -106,7 +106,7 @@ class FirebaseService {
         }
     }
 
-    suspend fun getData(reference: String): List<Any> {
+    suspend fun getData(reference: String): List<QueryDocumentSnapshot> {
         var data: List<QueryDocumentSnapshot> = listOf()
         Log.d(FIREBASE_TAG, "inicio de query $reference...")
         try {
@@ -118,9 +118,6 @@ class FirebaseService {
                         result.map {
                             Log.d(FIREBASE_TAG, "id ${it?.id} => ${it?.data}")
                         }
-//                        for (document in result) {
-//                            Log.d(FIREBASE_TAG, "id ${document?.id} => ${document?.data}")
-//                        }
                     else Log.e(FIREBASE_TAG, "data from server is null")
 
                 }
