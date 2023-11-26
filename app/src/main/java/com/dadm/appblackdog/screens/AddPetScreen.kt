@@ -51,11 +51,11 @@ import com.dadm.appblackdog.ui_elements.CustomInputText
 import com.dadm.appblackdog.ui_elements.CustomUnitField
 import com.dadm.appblackdog.ui_elements.GenericSpacer
 import com.dadm.appblackdog.ui_elements.MainAppBar
-import com.dadm.appblackdog.viewmodels.PetScreenViewModel
+import com.dadm.appblackdog.viewmodels.PetAddViewModel
 
 @Composable
 fun AddPetScreen(
-    petViewModel: PetScreenViewModel,
+    petViewModel: PetAddViewModel,
     navController: NavController,
 ) {
     val uiState by petViewModel.uiState.collectAsState()
@@ -107,7 +107,7 @@ fun AddPetScreen(
 
 @Composable
 fun AddPetBody(
-    petViewModel: PetScreenViewModel?,
+    petViewModel: PetAddViewModel?,
     uiState: UiPetForm,
     navController: NavController,
 ) {
@@ -168,7 +168,7 @@ fun AddPetBody(
 
 @Composable
 fun AddPetForm(
-    petViewModel: PetScreenViewModel?,
+    petViewModel: PetAddViewModel?,
     uiState: UiPetForm,
     navController: NavController
 ) {

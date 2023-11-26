@@ -25,15 +25,14 @@ import com.dadm.appblackdog.screens.MapScreen
 import com.dadm.appblackdog.screens.RecipesScreen
 import com.dadm.appblackdog.screens.UserDataScreen
 import com.dadm.appblackdog.ui_elements.CustomDrawer
-import com.dadm.appblackdog.ui_elements.MainAppBar
 import com.dadm.appblackdog.viewmodels.AppViewModelProvider
-import com.dadm.appblackdog.viewmodels.PetScreenViewModel
+import com.dadm.appblackdog.viewmodels.PetAddViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityScreen(
-    petViewModel: PetScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    petViewModel: PetAddViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())

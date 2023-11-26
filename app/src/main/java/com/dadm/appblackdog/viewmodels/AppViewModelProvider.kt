@@ -40,7 +40,7 @@ object AppViewModelProvider {
             )
         }
         initializer {
-            PetScreenViewModel(
+            PetAddViewModel(
                 ageRangeRepository = inventoryApplication().container.ageRangeRepository,
                 breedRepository = inventoryApplication().container.breedRepository,
                 measureUnitRepository = inventoryApplication().container.measureUnitRepository,

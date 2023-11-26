@@ -17,21 +17,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.dadm.appblackdog.R
 import com.dadm.appblackdog.models.BlackDogNavigationRoutes
 import com.dadm.appblackdog.ui.theme.AppBlackDogTheme
 import com.dadm.appblackdog.ui_elements.MainAppBar
-import com.dadm.appblackdog.viewmodels.AppViewModelProvider
-import com.dadm.appblackdog.viewmodels.PetScreenViewModel
+import com.dadm.appblackdog.viewmodels.PetAddViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun UserDataScreen(
     navController: NavController,
     drawerState: DrawerState,
-    petViewModel: PetScreenViewModel?,
+    petViewModel: PetAddViewModel?,
 ) {
     val scope = rememberCoroutineScope()
 

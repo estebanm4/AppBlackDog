@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class PetScreenViewModel(
+class PetAddViewModel(
     private val ageRangeRepository: AgeRangeRepository,
     private val breedRepository: BreedRepository,
     private val measureUnitRepository: MeasureUnitRepository,

@@ -1,18 +1,22 @@
 package com.dadm.appblackdog.models
 
-import com.google.firebase.Timestamp
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.dadm.appblackdog.utils.Constants
 
+@Entity(tableName = Constants.PET_TABLE_NAME)
 data class Pet(
-    val id: Int? = null,
-    val serverId: String? = null,
-    val ownerId: String? = null,
-    val name: String? = null,
-    val photoUrl: String? = null,
-    val ageRangeId: String? = null,
-    val description: String? = null,
-    val raceId: String? = null,
-    val weight: Float? = null,
-    val measureUnitId: String? = null,
-    val birthdate: Timestamp? = null,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val serverId: String = "",
+    val ownerId: String = "",
+    val name: String = "",
+    val photoUrl: String = "",
+    val ageRangeId: String = "",
+    val description: String = "",
+    val raceId: String = "",
+    val weight: Float = 0f,
+    val measureUnitId: String? = "",
+    val birthdate: Long = 0L,
 ) {
 }

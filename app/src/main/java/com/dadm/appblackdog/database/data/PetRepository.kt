@@ -1,7 +1,7 @@
 package com.dadm.appblackdog.database.data
 
 import android.util.Log
-import com.dadm.appblackdog.models.Breed
+import com.dadm.appblackdog.models.Pet
 import com.dadm.appblackdog.services.GENERIC_TAG
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -9,27 +9,27 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-interface BreedRepository {
-    fun getAllBreedStream(): Flow<List<Breed>>
+interface PetRepository {
+    fun getAllPetStream(): Flow<List<Pet>>
 
-    fun getBreedStream(id: Int): Flow<Breed?>
+    fun getPetStream(serverId: String): Flow<Pet?>
 
-    suspend fun insertBreed(data: Breed)
-    suspend fun insertMultipleBreed(data: List<Breed>, update: Boolean = true)
+    suspend fun insertPet(data: Pet)
+    suspend fun insertMultiplePet(data: List<Pet>, update: Boolean = true)
 
-    suspend fun deleteBreed(data: Breed)
+    suspend fun deletePet(data: Pet)
 
-    suspend fun updateBreed(data: Breed)
+    suspend fun updatePet(data: Pet)
 }
 
-class BreedOfflineRepository(private val dao: BreedDao): BreedRepository{
-    override fun getAllBreedStream(): Flow<List<Breed>> = dao.getAllItems()
+class PetOfflineRepository(private val dao: PetDao): PetRepository{
+    override fun getAllPetStream(): Flow<List<Pet>> = dao.getAllItems()
 
-    override fun getBreedStream(id: Int): Flow<Breed?> = dao.getItem(id)
+    override fun getPetStream(serverId: String): Flow<Pet?> = dao.getItem(serverId)
 
-    override suspend fun insertBreed(data: Breed) = dao.insert(data)
+    override suspend fun insertPet(data: Pet) = dao.insert(data)
 
-    override suspend fun insertMultipleBreed(data: List<Breed>, update: Boolean) {
+    override suspend fun insertMultiplePet(data: List<Pet>, update: Boolean) {
         // counts for actions in db
         var newData = 0
         var updateData = 0
@@ -52,12 +52,13 @@ class BreedOfflineRepository(private val dao: BreedDao): BreedRepository{
                         newData++
                     }
                 }
-            Log.d(GENERIC_TAG, "breeds newData $newData updateData $updateData")
+            Log.d(GENERIC_TAG, "pets newData $newData updateData $updateData")
         }
     }
 
-    override suspend fun deleteBreed(data: Breed) = dao.delete(data)
+    override suspend fun deletePet(data: Pet) = dao.delete(data)
 
-    override suspend fun updateBreed(data: Breed) = dao.update(data)
+    override suspend fun updatePet(data: Pet) = dao.update(data)
+
 
 }
