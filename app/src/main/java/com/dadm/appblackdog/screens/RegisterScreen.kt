@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -57,12 +58,14 @@ fun RegisterScreen(
 
 
 @Composable
-fun RegisterBody(uiState: UiRegister, registerViewModel: RegisterViewModel) {
+fun RegisterBody(uiState: UiRegister, registerViewModel: RegisterViewModel?) {
+
+    val context = LocalContext.current
     val dividerSize = 100.dp
     val space = 50.dp
     val space2 = 12.dp
     Column(
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(dimensionResource(id = R.dimen.padding_large))
@@ -111,7 +114,7 @@ fun RegisterBody(uiState: UiRegister, registerViewModel: RegisterViewModel) {
             }
             /** create button */
             Button(
-                onClick = { registerViewModel.validateForm() },
+                onClick = { registerViewModel?.validateForm(context) },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
                 modifier = Modifier
@@ -125,7 +128,7 @@ fun RegisterBody(uiState: UiRegister, registerViewModel: RegisterViewModel) {
 }
 
 @Composable
-fun RegisterForm(uiState: UiRegister, registerViewModel: RegisterViewModel) {
+fun RegisterForm(uiState: UiRegister, registerViewModel: RegisterViewModel?) {
 
     val modifier = Modifier
         .fillMaxWidth()
@@ -141,7 +144,7 @@ fun RegisterForm(uiState: UiRegister, registerViewModel: RegisterViewModel) {
             value = uiState.name,
             icon = Icons.Default.Person,
             label = stringResource(id = R.string.name),
-            onChange = { data -> registerViewModel.updateName(data) },
+            onChange = { data -> registerViewModel?.updateName(data) },
             modifier = Modifier.fillMaxWidth()
         )
         /** lastname textField */
@@ -150,21 +153,21 @@ fun RegisterForm(uiState: UiRegister, registerViewModel: RegisterViewModel) {
             value = uiState.lastname,
             icon = Icons.Default.Person,
             label = stringResource(id = R.string.lastname),
-            onChange = { data -> registerViewModel.updateLastname(data) },
+            onChange = { data -> registerViewModel?.updateLastname(data) },
             modifier = Modifier.fillMaxWidth()
         )
         /** email textField */
         EmailField(
             error = uiState.emailError,
             value = uiState.email,
-            onChange = { data -> registerViewModel.updateEmail(data) },
+            onChange = { data -> registerViewModel?.updateEmail(data) },
             modifier = Modifier.fillMaxWidth()
         )
         /** password textField */
         PasswordField(
             error = uiState.passwordError,
             value = uiState.password,
-            onChange = { data -> registerViewModel.updatePassword(data) },
+            onChange = { data -> registerViewModel?.updatePassword(data) },
             isLastField = false,
             modifier = Modifier.fillMaxWidth()
         )
@@ -173,7 +176,7 @@ fun RegisterForm(uiState: UiRegister, registerViewModel: RegisterViewModel) {
             error = uiState.validatePasswordError,
             value = uiState.validatedPassword,
             errorLabel = stringResource(id = R.string.invalid_password_confirm),
-            onChange = { data -> registerViewModel.updateValidatePassword(data) },
+            onChange = { data -> registerViewModel?.updateValidatePassword(data) },
             label = stringResource(id = R.string.validated_password),
             placeholder = stringResource(R.string.validated_password),
             isLastField = false,
@@ -191,10 +194,7 @@ fun RegisterScreenPreview() {
         ) {
             RegisterBody(
                 uiState = UiRegister(),
-                RegisterViewModel(
-                    firebaseService = null,
-                    ownerRepository = null,
-                )
+                registerViewModel = null
             )
         }
     }

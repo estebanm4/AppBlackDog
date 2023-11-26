@@ -54,6 +54,7 @@ class SplashViewModel(
         launch(Dispatchers.IO) { getAndSaveAgeRanges() }
         launch(Dispatchers.IO) { getAndSaveBreeds() }
         launch(Dispatchers.IO) { getAndSaveMeasureUnits() }
+        launch(Dispatchers.IO) { firebaseService.init() }
         withContext(Dispatchers.Main) {
             _uiState.update { ui -> ui.copy(navigate = true) }
         }

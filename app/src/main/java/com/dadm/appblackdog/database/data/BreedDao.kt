@@ -25,8 +25,10 @@ interface BreedDao {
 
     @Query("SELECT * from breeds ORDER BY name")
     fun getAllItems(): Flow<List<Breed>>
+
     @Query("SELECT COUNT() from breeds WHERE serverId = :serverId ")
-    fun checkItemByServerId(serverId:String): Flow<Int>
+    fun checkItemByServerId(serverId: String): Flow<Int>
+
     @Query("SELECT id from breeds WHERE serverId = :serverId ")
-    fun getItemId(serverId:String): Flow<Int>
+    fun getItemId(serverId: String): Flow<Int>
 }

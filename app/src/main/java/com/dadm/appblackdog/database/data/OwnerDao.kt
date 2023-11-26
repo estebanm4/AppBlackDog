@@ -22,4 +22,7 @@ interface OwnerDao {
 
     @Query("SELECT * from owners WHERE serverId = :serverId")
     fun getItem(serverId: String): Flow<Owner>
+
+    @Query("SELECT * from owners ORDER BY id")
+    fun getAllItems(): Flow<List<Owner>>
 }

@@ -23,4 +23,5 @@ interface OwnerRepository {
      * Update item in the data source
      */
     suspend fun updateOwner(data: Owner)
+    suspend fun cleanOwners()
 }

@@ -1,19 +1,30 @@
 package com.dadm.appblackdog.viewmodels
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.dadm.appblackdog.R
 import com.dadm.appblackdog.database.data.OwnerRepository
+import com.dadm.appblackdog.models.Owner
 import com.dadm.appblackdog.models.UiRegister
 import com.dadm.appblackdog.services.FirebaseService
 import com.dadm.appblackdog.services.GENERIC_TAG
+import com.dadm.appblackdog.utils.Constants
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val ownerRepository: OwnerRepository?,
-    private val firebaseService: FirebaseService?,
+    private val ownerRepository: OwnerRepository,
+    private val firebaseService: FirebaseService,
 ) : ViewModel() {
     //variable
     private val _uiState = MutableStateFlow(UiRegister())
@@ -53,11 +64,12 @@ class RegisterViewModel(
         }
     }
 
-    fun validateForm() {
+    fun validateForm(context: Context) {
 
-        if (_uiState.value.validateForm()) createUser()
+        if (_uiState.value.validateForm())
+            viewModelScope.launch { createUser(context) }
         else {
-            _uiState.update { it ->
+            _uiState.update {
                 it.copy(
                     emailError = !it.validateEmail(),
                     passwordError = it.password.length < 6,
@@ -69,5 +81,57 @@ class RegisterViewModel(
         }
     }
 
-    fun createUser() {}
+    private suspend fun createUser(context: Context) = coroutineScope {
+        //variables
+        val newUser = _uiState.value.toOwnerMap()
+        // create a account in firebase Auth
+        val successAuth = firebaseService.addNewUser(
+            email = _uiState.value.email,
+            password = _uiState.value.password,
+        )
+        Log.d(GENERIC_TAG, "successAuth? ${successAuth != null}")
+
+        // after, create a owner with user data in firestore
+        if (successAuth != null) {
+            val successCreate = async(Dispatchers.IO) {
+                firebaseService.setData(reference = Constants.OWNER_TABLE_NAME, data = newUser)
+            }.await()
+            // when complete server data task, start process to save user data in db
+            if (successCreate) {
+                // load all data data from owner table in firestore (required for obtain serverId)
+                val user = async(Dispatchers.IO) {
+                    firebaseService.getDataByArgument(
+                        reference = Constants.OWNER_TABLE_NAME,
+                        argument = "email",
+                        value = _uiState.value.email
+                    )
+                }.await()
+                // finally save the data in local db and finish user register
+                if (user.isNotEmpty()) {
+                    val loginUser = user.first()
+                    val ownerDb = Owner(
+                        serverId = loginUser.id,
+                        name = loginUser.data["name"] as String,
+                        lastname = loginUser.data["lastname"] as String,
+                        email = loginUser.data["email"] as String,
+                        hasPets = loginUser.data["hasPets"] as Boolean,
+                        photoUrl = loginUser.data["photoUrl"] as String,
+                    )
+                    // clean owner from last session
+                    ownerRepository.cleanOwners()
+                    // insert new owner data
+                    ownerRepository.insertOwner(ownerDb)
+                    Log.d(GENERIC_TAG, "Login process end ************")
+                }
+            }
+        } else {
+            Toast.makeText(
+                context,
+                ContextCompat.getString(context, R.string.create_user_error),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
+    }
 }

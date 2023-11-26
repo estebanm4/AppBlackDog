@@ -25,6 +25,7 @@
     <!--    server messages-->
     <string name="form_error">Error de datos ingresados</string>
     <string name="server_error">Error al conectarse con el servidor</string>
+    <string name="create_user_error">Error en el servidor, es posible que el email enviado ya tenga una cuenta</string>
     <!--    buttons-->
     <string name="next_button">Siguiente</string>
     <string name="start_button">Iniciar</string>

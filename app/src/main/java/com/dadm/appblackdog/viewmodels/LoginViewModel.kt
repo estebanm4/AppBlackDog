@@ -8,9 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.dadm.appblackdog.MainActivity
 import com.dadm.appblackdog.R
-import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.OwnerRepository
-import com.dadm.appblackdog.models.Owner
 import com.dadm.appblackdog.models.Pet
 import com.dadm.appblackdog.models.UiLogin
 import com.dadm.appblackdog.services.FirebaseService

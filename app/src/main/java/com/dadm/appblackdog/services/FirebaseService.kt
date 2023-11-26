@@ -20,12 +20,12 @@ class FirebaseService {
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
 
-    private fun init() {
+    fun init() {
         auth = Firebase.auth
     }
 
     suspend fun emailLogin(data: UiLogin, context: Context): Boolean {
-        init()
+//        init()
         var isSuccess = false
         try {
             auth.signInWithEmailAndPassword(data.email, data.password)
@@ -44,20 +44,20 @@ class FirebaseService {
         return isSuccess
     }
 
-    suspend fun addNewUser(email: String, password: String, context: Context): FirebaseUser? {
-        var user: FirebaseUser? = null
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(context as Activity) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(GENERIC_TAG, "createUserWithEmail:success")
-                    user = auth.currentUser
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(GENERIC_TAG, "createUserWithEmail:failure", task.exception)
-                }
-            }
-        return user
+    suspend fun addNewUser(email: String, password: String): FirebaseUser? {
+        return try {
+            val snapshot = auth.createUserWithEmailAndPassword(email, password)
+            val data = snapshot.await()
+            if (snapshot.isSuccessful)
+                Log.d(GENERIC_TAG, "createUserWithEmail:success")
+            else
+                Log.w(GENERIC_TAG, "createUserWithEmail:failure", snapshot.exception)
+            data.user
+        } catch (e: Exception) {
+            Log.e(GENERIC_TAG, "fatal error $e")
+            null
+        }
+
     }
 
     fun userLogOut() {
@@ -66,11 +66,13 @@ class FirebaseService {
         }
     }
 
-    suspend fun setData(reference: String, data: Any) {
+    suspend fun setData(reference: String, data: Any): Boolean {
+        var success = false
         try {
             db.collection(reference).document()
                 .set(data)
                 .addOnSuccessListener {
+                    success = true
                     Log.d(GENERIC_TAG, "DocumentSnapshot successfully written!")
                 }
                 .addOnFailureListener { e ->
@@ -83,7 +85,7 @@ class FirebaseService {
         } catch (e: Exception) {
             Log.e(GENERIC_TAG, "fatal error $e")
         }
-
+        return success
     }
 
     suspend fun updateData(reference: String, itemId: String, argument: String, value: Any) {
@@ -129,12 +131,18 @@ class FirebaseService {
         return data
     }
 
-    suspend fun getDataByArgument(reference: String, argument: String, value: Any) {
+    suspend fun getDataByArgument(
+        reference: String,
+        argument: String,
+        value: Any
+    ): List<QueryDocumentSnapshot> {
+        var data: List<QueryDocumentSnapshot> = listOf()
         try {
             db.collection(reference)
                 .whereEqualTo(argument, value)
                 .get()
                 .addOnSuccessListener { result ->
+                    data = result.toList()
                     if (result != null)
                         for (document in result) {
                             Log.d(GENERIC_TAG, "id ${document?.id} => ${document?.data}")
@@ -147,6 +155,7 @@ class FirebaseService {
         } catch (e: Exception) {
             Log.e(GENERIC_TAG, "fatal error $e")
         }
+        return data
     }
 
 }
