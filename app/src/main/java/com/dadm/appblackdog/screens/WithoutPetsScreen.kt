@@ -26,13 +26,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dadm.appblackdog.R
 import com.dadm.appblackdog.ui_elements.GenericSpacer
+import com.dadm.appblackdog.viewmodels.AppViewModelProvider
+import com.dadm.appblackdog.viewmodels.PetScreenViewModel
 
 @Composable
 fun WithoutPetsScreen(
-    actionButton: () -> Unit = {}
-) {
+    actionButton: () -> Unit = {},
+    ) {
     val titleTextSize =
         with(LocalDensity.current) { dimensionResource(id = R.dimen.title_large).toSp() }
     Surface {
@@ -47,7 +50,7 @@ fun WithoutPetsScreen(
                 text = stringResource(id = R.string.without_pets),
                 fontSize = titleTextSize,
                 fontWeight = FontWeight.Bold,
-                color = Color.LightGray,
+                color = Color.Gray,
                 textAlign = TextAlign.Center
             )
             GenericSpacer()

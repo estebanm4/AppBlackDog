@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -25,11 +26,15 @@ import com.dadm.appblackdog.screens.RecipesScreen
 import com.dadm.appblackdog.screens.UserDataScreen
 import com.dadm.appblackdog.ui_elements.CustomDrawer
 import com.dadm.appblackdog.ui_elements.MainAppBar
+import com.dadm.appblackdog.viewmodels.AppViewModelProvider
+import com.dadm.appblackdog.viewmodels.PetScreenViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainActivityScreen() {
+fun MainActivityScreen(
+    petViewModel: PetScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -55,7 +60,11 @@ fun MainActivityScreen() {
                 modifier = Modifier.padding(padding),
             ) {
                 composable(BlackDogNavigationRoutes.UserData.name) {
-                    UserDataScreen(navController = navController, drawerState = drawerState)
+                    UserDataScreen(
+                        navController = navController,
+                        drawerState = drawerState,
+                        petViewModel = petViewModel
+                    )
                 }
                 composable(BlackDogNavigationRoutes.Map.name) {
                     MapScreen(action = {})
@@ -75,7 +84,7 @@ fun MainActivityScreen() {
                     })
                 }
                 composable(BlackDogNavigationRoutes.AddPet.name) {
-                    AddPetScreen(navController = navController)
+                    AddPetScreen(navController = navController, petViewModel = petViewModel)
                 }
 
             }

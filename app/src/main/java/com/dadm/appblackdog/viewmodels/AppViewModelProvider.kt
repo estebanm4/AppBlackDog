@@ -40,6 +40,9 @@ object AppViewModelProvider {
         }
         initializer {
             PetScreenViewModel(
+                ageRangeRepository = inventoryApplication().container.ageRangeRepository,
+                breedRepository = inventoryApplication().container.breedRepository,
+                measureUnitRepository = inventoryApplication().container.measureUnitRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }

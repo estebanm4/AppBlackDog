@@ -20,8 +20,8 @@ interface MeasureUnitDao {
     @Delete
     suspend fun delete(item: MeasureUnit)
 
-    @Query("SELECT * from measureUnits WHERE id = :id")
-    fun getItem(id: Int): Flow<MeasureUnit>
+    @Query("SELECT * from measureUnits WHERE type = :type")
+    fun getItemList(type: String): Flow<List<MeasureUnit>>
 
     @Query("SELECT * from measureUnits ORDER BY type")
     fun getAllItems(): Flow<List<MeasureUnit>>

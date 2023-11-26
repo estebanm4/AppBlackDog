@@ -37,6 +37,8 @@
     <string name="weight">Peso</string>
     <string name="unit">Unidad</string>
     <string name="breed">Raza</string>
+    <string name="age_range">Rango De Edad</string>
+    <string name="birthday">Fecha de nacimiento</string>
     <!--    server messages-->
     <string name="form_error">Error de datos ingresados</string>
     <string name="server_error">Error al conectarse, verifica que los datos enviados sean correctos</string>

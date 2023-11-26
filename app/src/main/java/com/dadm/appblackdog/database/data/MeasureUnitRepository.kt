@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 interface MeasureUnitRepository {
     fun getAllMeasureUnitStream(): Flow<List<MeasureUnit>>
 
-    fun getMeasureUnitStream(id: Int): Flow<MeasureUnit?>
+    fun getMeasureUnitStream(value: String): Flow<List<MeasureUnit>>
 
     suspend fun insertMeasureUnit(data: MeasureUnit)
     suspend fun insertMultipleMeasureUnit(data: List<MeasureUnit>, update: Boolean = true)
@@ -25,7 +25,7 @@ interface MeasureUnitRepository {
 class MeasureUnitOfflineRepository(private val dao: MeasureUnitDao) : MeasureUnitRepository {
     override fun getAllMeasureUnitStream(): Flow<List<MeasureUnit>> = dao.getAllItems()
 
-    override fun getMeasureUnitStream(id: Int): Flow<MeasureUnit?> = dao.getItem(id)
+    override fun getMeasureUnitStream(value: String): Flow<List<MeasureUnit>> = dao.getItemList(value)
 
     override suspend fun insertMeasureUnit(data: MeasureUnit) = dao.insert(data)
 
