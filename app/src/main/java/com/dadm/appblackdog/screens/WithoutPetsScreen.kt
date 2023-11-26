@@ -73,7 +73,7 @@ fun WithoutPetsScreen(
                 textAlign = TextAlign.Center
             )
             GenericSpacer(space = 8.dp)
-            OutlinedButton(onClick = {}) {
+            OutlinedButton(onClick = actionButton) {
                 Text(text = stringResource(id = R.string.add_pet))
             }
         }

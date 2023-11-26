@@ -4,6 +4,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import com.dadm.appblackdog.R
 import com.dadm.appblackdog.ui.theme.primaryRed
@@ -31,6 +33,7 @@ fun CustomInputText(
     placeholder: String = label,
     errorLabel: String = "$label ${stringResource(id = R.string.required)}",
     errorPlaceholder: String = stringResource(id = R.string.required_field),
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     // data
     val focusManager = LocalFocusManager.current
@@ -42,13 +45,14 @@ fun CustomInputText(
         )
     }
     // UI
-    TextField(
+    OutlinedTextField(
         value = value,
         onValueChange = onChange,
         modifier = modifier,
         leadingIcon = leadingIcon,
         keyboardOptions = KeyboardOptions(
-            imeAction = if (isLastField) ImeAction.Done else ImeAction.Next
+            imeAction = if (isLastField) ImeAction.Done else ImeAction.Next,
+            keyboardType = keyboardType
         ),
         keyboardActions =
         if (isLastField)

@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dadm.appblackdog.R
+import com.dadm.appblackdog.models.BlackDogNavigationRoutes
 import com.dadm.appblackdog.ui.theme.AppBlackDogTheme
 import com.dadm.appblackdog.ui_elements.MainAppBar
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ fun UserDataScreen(navController: NavController, drawerState: DrawerState) {
                     }
                 },
                 trailingAction = {
-
+                    navController.navigate(BlackDogNavigationRoutes.AddPet.name)
                 }
             )
         }
@@ -53,7 +54,9 @@ fun UserDataScreen(navController: NavController, drawerState: DrawerState) {
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            WithoutPetsScreen()
+            WithoutPetsScreen(
+                actionButton = { navController.navigate(BlackDogNavigationRoutes.AddPet.name) }
+            )
         }
     }
 }

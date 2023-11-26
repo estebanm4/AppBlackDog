@@ -5,5 +5,6 @@ enum class BlackDogNavigationRoutes {
     Map,
     Recipes,
     Calendar,
-    Info
+    Info,
+    AddPet,
 }

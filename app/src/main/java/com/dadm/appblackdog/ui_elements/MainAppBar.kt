@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Update
@@ -33,7 +34,7 @@ fun MainAppBar(
     label: String = stringResource(id = R.string.app_name),
     leadingIcon: ImageVector = Icons.Default.Menu,
     trailingIcon: ImageVector = Icons.Default.Update,
-    hideEndIcon: Boolean = false,
+    hideTrailingIcon: Boolean = false,
     leadingAction: () -> Unit = {},
     trailingAction: () -> Unit = {},
 ) {
@@ -59,6 +60,7 @@ fun MainAppBar(
                 onClick = leadingAction
             ) {
                 Icon(
+                    modifier = Modifier.size(32.dp),
                     imageVector = leadingIcon,
                     contentDescription = stringResource(id = R.string.default_description),
                     tint = MaterialTheme.colorScheme.primary
@@ -75,10 +77,11 @@ fun MainAppBar(
                 text = label
             )
             Box(modifier = Modifier.weight(1f)) {
-                if (!hideEndIcon) IconButton(
+                if (!hideTrailingIcon) IconButton(
                     onClick = trailingAction
                 ) {
                     Icon(
+                        modifier = Modifier.size(32.dp),
                         imageVector = trailingIcon,
                         contentDescription = stringResource(id = R.string.default_description),
                         tint = MaterialTheme.colorScheme.primary

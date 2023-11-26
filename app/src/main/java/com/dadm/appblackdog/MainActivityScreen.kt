@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dadm.appblackdog.models.BlackDogNavigationRoutes
+import com.dadm.appblackdog.screens.AddPetScreen
 import com.dadm.appblackdog.screens.CalendarScreen
 import com.dadm.appblackdog.screens.InfoScreen
 import com.dadm.appblackdog.screens.MapScreen
@@ -57,13 +58,13 @@ fun MainActivityScreen() {
                     UserDataScreen(navController = navController, drawerState = drawerState)
                 }
                 composable(BlackDogNavigationRoutes.Map.name) {
-                    MapScreen(action = { navController.navigate(BlackDogNavigationRoutes.Recipes.name) })
+                    MapScreen(action = {})
                 }
                 composable(BlackDogNavigationRoutes.Recipes.name) {
-                    RecipesScreen(action = { navController.navigate(BlackDogNavigationRoutes.Calendar.name) })
+                    RecipesScreen(action = {})
                 }
                 composable(BlackDogNavigationRoutes.Calendar.name) {
-                    CalendarScreen(action = { navController.navigate(BlackDogNavigationRoutes.Info.name) })
+                    CalendarScreen(action = { })
                 }
                 composable(BlackDogNavigationRoutes.Info.name) {
                     InfoScreen(action = {
@@ -73,6 +74,10 @@ fun MainActivityScreen() {
                         )
                     })
                 }
+                composable(BlackDogNavigationRoutes.AddPet.name) {
+                    AddPetScreen(navController = navController)
+                }
+
             }
 
         }

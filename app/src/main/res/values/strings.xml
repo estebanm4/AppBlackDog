@@ -22,6 +22,8 @@
     <string name="recipes">Recetas</string>
     <string name="calendar">Agenda</string>
     <string name="more_info">Informacion Adicional</string>
+    <string name="add_pet_title">Nueva Mascota</string>
+    <string name="edit_pet_title">Editar Mascota</string>
     <!--    pet screen-->
     <string name="without_pets">No se encontraron mascotas</string>
     <string name="without_pets_description">si quieres aprovechar al máximo nuestra aplicación, es necesario crear como mínimo una mascota</string>
@@ -31,6 +33,10 @@
     <string name="lastname">Apellido</string>
     <string name="required_field">Campo obligatorio</string>
     <string name="required">Obligatorio</string>
+    <string name="description">Descripción</string>
+    <string name="weight">Peso</string>
+    <string name="unit">Unidad</string>
+    <string name="breed">Raza</string>
     <!--    server messages-->
     <string name="form_error">Error de datos ingresados</string>
     <string name="server_error">Error al conectarse, verifica que los datos enviados sean correctos</string>

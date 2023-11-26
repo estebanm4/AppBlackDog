@@ -38,6 +38,11 @@ object AppViewModelProvider {
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }
+        initializer {
+            PetScreenViewModel(
+                firebaseService = inventoryApplication().container.firebaseService,
+            )
+        }
     }
 }
 
