@@ -14,7 +14,6 @@ class Constants {
         const val TYPE_WEIGHT = "peso"
         const val TYPE_VOLUME = "volumen"
         const val TYPE_OTHER = "otros"
-
         /** TEST DATA */
         const val EMAIL = "test@test.com"
         const val PASS = "test123"

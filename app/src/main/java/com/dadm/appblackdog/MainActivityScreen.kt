@@ -47,9 +47,6 @@ fun MainActivityScreen() {
     ) {
         Scaffold(
             modifier = modifier,
-            topBar = {
-                MainAppBar(drawerState = drawerState)
-            }
         ) { padding ->
             NavHost(
                 navController = navController,

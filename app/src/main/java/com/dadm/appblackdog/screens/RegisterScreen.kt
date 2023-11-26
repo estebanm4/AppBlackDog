@@ -139,7 +139,7 @@ fun RegisterBody(
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                Text(stringResource(id = R.string.create_user))
+                Text(stringResource(id = R.string.create))
             }
         }
     }
