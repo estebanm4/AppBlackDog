@@ -21,13 +21,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.dadm.appblackdog.R
 import com.dadm.appblackdog.ui.theme.AppBlackDogTheme
 
 @Composable
-fun UserDataScreen(
-    action: () -> Unit,
-) {
+fun UserDataScreen(navController: NavController?) {
     //content
     Column(
         verticalArrangement = Arrangement.Center,
@@ -51,7 +50,7 @@ fun UserDataScreen(
                 )
         )
         Spacer(modifier = Modifier.padding(vertical = 5.dp))
-        OutlinedButton(onClick = action) {
+        OutlinedButton(onClick = {}) {
             Text(text = stringResource(id = R.string.next_button))
         }
     }
@@ -61,6 +60,6 @@ fun UserDataScreen(
 @Composable
 fun GreetingPreview() {
     AppBlackDogTheme {
-        UserDataScreen(action = {})
+        UserDataScreen(null)
     }
 }

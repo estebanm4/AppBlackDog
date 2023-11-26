@@ -24,7 +24,12 @@ import androidx.compose.ui.unit.dp
 import com.dadm.appblackdog.R
 
 @Composable
-fun DrawerButton(label: String, icon: ImageVector, onClick: () -> Unit) {
+fun DrawerButton(
+    label: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    isSelected: Boolean = false
+) {
     Column(
         modifier = Modifier
             .height(IntrinsicSize.Min)
@@ -42,7 +47,8 @@ fun DrawerButton(label: String, icon: ImageVector, onClick: () -> Unit) {
             Icon(
                 imageVector = icon,
                 contentDescription = stringResource(id = R.string.default_description),
-                tint = MaterialTheme.colorScheme.primary,
+                tint = if (isSelected) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.size(12.dp))
