@@ -31,8 +31,10 @@ fun SplashScreen(
 
     splashViewModel.init()
 
-    if (uiState.navigate) {
-        splashViewModel.navigateToScreen(context)
+    when{
+        uiState.navigate ->{
+            splashViewModel.navigateToScreen(context)
+        }
     }
     Surface(
         modifier = Modifier.fillMaxSize(),

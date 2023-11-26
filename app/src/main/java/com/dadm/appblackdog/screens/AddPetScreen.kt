@@ -111,6 +111,8 @@ fun AddPetBody(
     uiState: UiPetForm,
     navController: NavController,
 ) {
+    val context = LocalContext.current
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -118,7 +120,7 @@ fun AddPetBody(
             .fillMaxHeight()
             .padding(dimensionResource(id = R.dimen.padding_large))
     ) {
-        AddPetForm(petViewModel = petViewModel, uiState = uiState)
+        AddPetForm(petViewModel = petViewModel, uiState = uiState, navController = navController)
         GenericSpacer()
         Row(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_large)),
@@ -146,7 +148,12 @@ fun AddPetBody(
             }
             /** create button */
             Button(
-                onClick = { petViewModel?.validateForm() },
+                onClick = {
+                    petViewModel?.validateForm(
+                        context = context,
+                        navController = navController
+                    )
+                },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
                 modifier = Modifier
@@ -163,7 +170,10 @@ fun AddPetBody(
 fun AddPetForm(
     petViewModel: PetScreenViewModel?,
     uiState: UiPetForm,
+    navController: NavController
 ) {
+    val context = LocalContext.current
+
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_large)),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -226,7 +236,12 @@ fun AddPetForm(
             onChange = { data -> petViewModel?.updateDescription(data) },
             modifier = Modifier.fillMaxWidth(),
             isLastField = true,
-            submit = { petViewModel?.validateForm() }
+            submit = {
+                petViewModel?.validateForm(
+                    context = context,
+                    navController = navController
+                )
+            }
         )
     }
 }

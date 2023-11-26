@@ -2,17 +2,18 @@ package com.dadm.appblackdog.models
 
 data class UiPetForm(
     var name: String = "",
+    var breedId: String = "",
+    var ageRangeId: String = "",
+    var weight: String = "",
+    var measureUnitId: String = "",
+    var birthdateTimeStamp: Long = 0,
     var description: String = "",
+    var photoUrl: String = "",
+
     var breed: String = "",
     var ageRange: String = "",
-    var weight: String = "",
     var measureUnit: String = "",
     var birthdate: String = "",
-    var birthdateTimeStamp: Long = 0,
-    var photoUrl: String = "",
-    var ageRangeId: String = "",
-    var measureUnitId: String = "",
-    var breedId: String = "",
     var measureUnitList: MutableList<String> = mutableListOf(""),
     var breedList: MutableList<String> = mutableListOf(""),
     var ageRangeList: MutableList<String> = mutableListOf(""),
@@ -29,5 +30,19 @@ data class UiPetForm(
     fun validateForm(): Boolean {
         return name.isNotEmpty() && breedId.isNotEmpty() && ageRangeId.isNotEmpty() &&
                 weight.isNotEmpty() && measureUnitId.isNotEmpty() && birthdateTimeStamp != 0L && birthdate.isNotEmpty()
+    }
+
+    fun toPetMap(ownerId: String): HashMap<String, Any> {
+        return hashMapOf(
+            "ownerId" to ownerId,
+            "name" to name,
+            "breedId" to breedId,
+            "ageRangeId" to ageRangeId,
+            "weight" to weight.toLong(),
+            "measureUnitId" to measureUnitId,
+            "birthdate" to birthdateTimeStamp,
+            "description" to description,
+            "photoUrl" to photoUrl
+        )
     }
 }

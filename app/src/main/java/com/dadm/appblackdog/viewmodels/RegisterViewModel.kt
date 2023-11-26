@@ -115,7 +115,7 @@ class RegisterViewModel(
                     )
                 }.await()
                 // finally save the data in local db and finish user register
-                if (user.isNotEmpty()) {
+                if (!user.isNullOrEmpty()) {
                     val loginUser = user.first()
                     val ownerDb = Owner(
                         serverId = loginUser.id,

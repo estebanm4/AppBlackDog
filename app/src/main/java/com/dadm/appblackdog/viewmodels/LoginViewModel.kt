@@ -62,9 +62,9 @@ class LoginViewModel(
                     value = _uiState.value.email
                 )
             }.await()
-            Log.d(GENERIC_TAG, "load user info ${user.isNotEmpty()}")
+            Log.d(GENERIC_TAG, "load user info ${user?.isNotEmpty()}")
             // finally save the data in local db and finish user register
-            if (user.isNotEmpty()) {
+            if (!user.isNullOrEmpty()) {
                 val loginUser = user.first()
                 val ownerDb = Owner(
                     serverId = loginUser.id,

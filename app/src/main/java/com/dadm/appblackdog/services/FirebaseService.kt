@@ -1,7 +1,5 @@
 package com.dadm.appblackdog.services
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
 import com.dadm.appblackdog.models.UiLogin
 import com.google.firebase.Firebase
@@ -63,95 +61,66 @@ class FirebaseService {
     }
 
     suspend fun setData(reference: String, data: Any): Boolean {
-        var success = false
-        try {
-            db.collection(reference).document()
-                .set(data)
-                .addOnSuccessListener {
-                    success = true
-                    Log.d(GENERIC_TAG, "DocumentSnapshot successfully written!")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(
-                        GENERIC_TAG,
-                        "Error writing document",
-                        e
-                    )
-                }.await()
+        return try {
+            val snapshot = db.collection(reference).document().set(data)
+            snapshot.await()
+            if (snapshot.isSuccessful)
+                Log.d(GENERIC_TAG, "DocumentSnapshot successfully written!")
+            else
+                Log.w(GENERIC_TAG, "Error writing document", snapshot.exception)
+            snapshot.isSuccessful
         } catch (e: Exception) {
             Log.e(GENERIC_TAG, "fatal error $e")
+            false
         }
-        return success
     }
 
     suspend fun updateData(reference: String, itemId: String, argument: String, value: Any) {
-
         try {
-            db.collection(reference)
-                .document(itemId).update(argument, value)
-                .addOnSuccessListener {
-                    Log.d(
-                        GENERIC_TAG,
-                        "DocumentSnapshot successfully updated!"
-                    )
-                }
-                .addOnFailureListener { e ->
-                    Log.w(GENERIC_TAG, "Error updating document", e)
-                }.await()
+            val snapshot = db.collection(reference).document(itemId).update(argument, value)
+            snapshot.await()
+            if (snapshot.isSuccessful) {
+                Log.d(GENERIC_TAG, "DocumentSnapshot successfully updated!")
+            } else
+                Log.w(GENERIC_TAG, "Error updating document", snapshot.exception)
+
         } catch (e: Exception) {
             Log.e(GENERIC_TAG, "fatal error $e")
         }
     }
 
-    suspend fun getData(reference: String): List<QueryDocumentSnapshot> {
-        var data: List<QueryDocumentSnapshot> = listOf()
-        Log.d(GENERIC_TAG, "inicio de query $reference...")
-        try {
-            db.collection(reference)
-                .get()
-                .addOnSuccessListener { result ->
-                    data = result.toList()
-                    if (result != null)
-                        result.map {
-                            Log.d(GENERIC_TAG, "id ${it?.id} => ${it?.data}")
-                        }
-                    else Log.e(GENERIC_TAG, "data from server is null")
-
-                }
-                .addOnFailureListener { exception ->
-                    Log.d(GENERIC_TAG, "Error getting documents: ", exception)
-                }.await()
+    suspend fun getData(reference: String): List<QueryDocumentSnapshot>? {
+        return try {
+            val snapshot = db.collection(reference).get()
+            val data = snapshot.await()
+            if (snapshot.isSuccessful && data.toList().isNotEmpty()) {
+                data.map { Log.d(GENERIC_TAG, "id ${it?.id} => ${it?.data}") }
+            } else
+                Log.w(GENERIC_TAG, "Error getting documents: ", snapshot.exception)
+            data.toList()
         } catch (e: Exception) {
             Log.e(GENERIC_TAG, "fatal error $e")
+            null
         }
-        return data
     }
 
     suspend fun getDataByArgument(
         reference: String,
         argument: String,
         value: Any
-    ): List<QueryDocumentSnapshot> {
-        var data: List<QueryDocumentSnapshot> = listOf()
-        try {
-            db.collection(reference)
-                .whereEqualTo(argument, value)
-                .get()
-                .addOnSuccessListener { result ->
-                    data = result.toList()
-                    if (result != null)
-                        for (document in result) {
-                            Log.d(GENERIC_TAG, "id ${document?.id} => ${document?.data}")
-                        }
-                    else Log.e(GENERIC_TAG, "data from server is null")
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(GENERIC_TAG, "Error getting documents: ", exception)
-                }.await()
+    ): List<QueryDocumentSnapshot>? {
+        return try {
+            val snapshot = db.collection(reference).whereEqualTo(argument, value).get()
+            val data = snapshot.await()
+            if (snapshot.isSuccessful && data.toList().isNotEmpty()) {
+                data.map { Log.d(GENERIC_TAG, "id ${it?.id} => ${it?.data}") }
+            } else
+                Log.w(GENERIC_TAG, "Error getting documents: ", snapshot.exception)
+            data.toList()
         } catch (e: Exception) {
             Log.e(GENERIC_TAG, "fatal error $e")
+            null
         }
-        return data
     }
 
 }

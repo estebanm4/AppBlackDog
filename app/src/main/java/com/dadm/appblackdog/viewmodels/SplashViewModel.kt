@@ -11,9 +11,11 @@ import com.dadm.appblackdog.MainActivity
 import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.BreedRepository
 import com.dadm.appblackdog.database.data.MeasureUnitRepository
+import com.dadm.appblackdog.database.data.OwnerRepository
 import com.dadm.appblackdog.models.AgeRange
 import com.dadm.appblackdog.models.Breed
 import com.dadm.appblackdog.models.MeasureUnit
+import com.dadm.appblackdog.models.Owner
 import com.dadm.appblackdog.models.UiSplash
 import com.dadm.appblackdog.services.GENERIC_TAG
 import com.dadm.appblackdog.services.FirebaseService
@@ -24,6 +26,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,6 +35,7 @@ class SplashViewModel(
     private val ageRangeRepository: AgeRangeRepository,
     private val breedRepository: BreedRepository,
     private val measureUnitRepository: MeasureUnitRepository,
+    private val ownerRepository: OwnerRepository,
     private val firebaseService: FirebaseService,
 ) : ViewModel() {
 
@@ -55,9 +59,11 @@ class SplashViewModel(
         launch(Dispatchers.IO) { getAndSaveBreeds() }
         launch(Dispatchers.IO) { getAndSaveMeasureUnits() }
         launch(Dispatchers.IO) { firebaseService.init() }
-        withContext(Dispatchers.Main) {
-            _uiState.update { ui -> ui.copy(navigate = true) }
-        }
+        val users = async(Dispatchers.IO) { ownerRepository.getOwnerStream().first() }.await()
+        _uiState.update { ui -> ui.copy(navigate = true, isUserLogin = users.isNotEmpty()) }
+//        withContext(Dispatchers.Main) {
+//
+//        }
     }
 
     /** age ranges server and db process */
@@ -67,9 +73,9 @@ class SplashViewModel(
         var success = false
         // get age ranges
         val ageRanges = firebaseService.getData(Constants.AGE_RANGES_TABLE_NAME)
-        Log.d(GENERIC_TAG, "rangos de edad desde el servidor: ${ageRanges.size}")
+        Log.d(GENERIC_TAG, "rangos de edad desde el servidor: ${ageRanges?.size}")
         // when server return data generate a valid list to send to db
-        if (ageRanges.isNotEmpty())
+        if (!ageRanges.isNullOrEmpty())
             ageRanges.map {
                 ageRangeSaveList.add(
                     AgeRange(
@@ -95,9 +101,9 @@ class SplashViewModel(
         var success = false
         // get age ranges
         val breeds = firebaseService.getData(Constants.BREEDS_TABLE_NAME)
-        Log.d(GENERIC_TAG, "rangos de edad desde el servidor: ${breeds.size}")
+        Log.d(GENERIC_TAG, "rangos de edad desde el servidor: ${breeds?.size}")
         // when server return data generate a valid list to send to db
-        if (breeds.isNotEmpty())
+        if (!breeds.isNullOrEmpty())
             breeds.map {
                 breedsSaveList.add(
                     Breed(
@@ -122,9 +128,9 @@ class SplashViewModel(
         var success = false
         // get age ranges
         val measureUnits = firebaseService.getData(Constants.MEASURE_UNIT_TABLE_NAME)
-        Log.d(GENERIC_TAG, "unidades de medida desde el servidor: ${measureUnits.size}")
+        Log.d(GENERIC_TAG, "unidades de medida desde el servidor: ${measureUnits?.size}")
         // when server return data generate a valid list to send to db
-        if (measureUnits.isNotEmpty())
+        if (!measureUnits.isNullOrEmpty())
             measureUnits.map {
                 measureUnitSaveList.add(
                     MeasureUnit(
@@ -147,14 +153,12 @@ class SplashViewModel(
 
     fun navigateToScreen(context: Context) {
         Log.d(GENERIC_TAG, "start navigation *********************")
-        if (isUserLogin()) navigateToDashboard(context)
+        if (_uiState.value.isUserLogin) navigateToDashboard(context)
         else navigateToLogin(context)
         loadIsRun = false
     }
 
-    private fun isUserLogin(): Boolean = true
     private fun navigateToLogin(context: Context) {
-//        val context = LocalContext.current
         context.startActivity(Intent(context, LoginActivity::class.java))
         (context as Activity).finish()
     }
