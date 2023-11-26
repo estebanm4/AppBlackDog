@@ -49,7 +49,8 @@ import com.dadm.appblackdog.viewmodels.RegisterViewModel
 
 @Composable
 fun RegisterScreen(
-    registerViewModel: RegisterViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    registerViewModel: RegisterViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigationAction: () -> Unit
 ) {
     val uiState by registerViewModel.uiState.collectAsState()
 
@@ -66,13 +67,17 @@ fun RegisterScreen(
             )
         }
     else
-        RegisterBody(uiState, registerViewModel)
+        RegisterBody(uiState, registerViewModel, navigationAction)
 
 }
 
 
 @Composable
-fun RegisterBody(uiState: UiRegister, registerViewModel: RegisterViewModel?) {
+fun RegisterBody(
+    uiState: UiRegister,
+    registerViewModel: RegisterViewModel?,
+    navigationAction: () -> Unit
+) {
 
     val context = LocalContext.current
     val dividerSize = 100.dp
@@ -116,7 +121,7 @@ fun RegisterBody(uiState: UiRegister, registerViewModel: RegisterViewModel?) {
         ) {
             /** cancel button */
             Button(
-                onClick = {},
+                onClick = navigationAction,
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = primaryRed),
@@ -209,7 +214,8 @@ fun RegisterScreenPreview() {
         ) {
             RegisterBody(
                 uiState = UiRegister(),
-                registerViewModel = null
+                registerViewModel = null,
+                navigationAction = {}
             )
         }
     }

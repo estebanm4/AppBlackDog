@@ -13,7 +13,7 @@ import com.dadm.appblackdog.screens.MapScreen
 import com.dadm.appblackdog.screens.RecipesScreen
 import com.dadm.appblackdog.screens.UserDataScreen
 
-enum class BlackDogsScreen() {
+enum class BlackDogsScreen {
     UserData,
     Map,
     Recipes,

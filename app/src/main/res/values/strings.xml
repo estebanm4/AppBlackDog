@@ -11,6 +11,7 @@
     <string name="validated_password">Confirmar Contraseña</string>
     <string name="remember_me">Recordarme</string>
     <string name="login">Iniciar Sesion</string>
+    <string name="register">Registrarse</string>
     <string name="register_title">Nuevo Usuario</string>
     <string name="invalid_email">Email no valido</string>
     <string name="invalid_password">La contraseña es muy corta</string>

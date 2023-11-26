@@ -29,11 +29,14 @@ import com.dadm.appblackdog.ui_elements.LabelCheckbox
 import com.dadm.appblackdog.ui_elements.PasswordField
 import com.dadm.appblackdog.viewmodels.AppViewModelProvider
 import com.dadm.appblackdog.viewmodels.LoginViewModel
+import com.dadm.appblackdog.viewmodels.RegisterViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginFormScreen(
-    loginViewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    loginViewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    registerViewModel: RegisterViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    actionNavigation: () -> Unit,
 ) {
 
     //variables
@@ -85,13 +88,14 @@ fun LoginFormScreen(
             }
             Button(
                 onClick = {
-
+                    registerViewModel.resetData()
+                    actionNavigation.invoke()
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("testing firestore")
+                Text(stringResource(id = R.string.register))
             }
         } else Column(
         verticalArrangement = Arrangement.Center,
@@ -113,6 +117,6 @@ fun LoginFormScreen(
 @Composable
 fun LoginFormPreview() {
     AppBlackDogTheme {
-        LoginFormScreen()
+        LoginFormScreen(actionNavigation = {})
     }
 }

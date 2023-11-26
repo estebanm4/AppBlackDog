@@ -30,6 +30,9 @@ class RegisterViewModel(
     private val _uiState = MutableStateFlow(UiRegister())
     val uiState: StateFlow<UiRegister> = _uiState.asStateFlow()
 
+    fun resetData(){
+        _uiState.value = UiRegister()
+    }
     fun updateName(data: String) {
         _uiState.update { state -> state.copy(name = data, nameError = data.isEmpty()) }
     }
