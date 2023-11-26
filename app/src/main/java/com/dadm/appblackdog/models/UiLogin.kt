@@ -8,8 +8,6 @@ data class UiLogin(
     /** campo de texto para la contraseña*/
     var password: String = Constants.PASS,
     /** checkbox recordarme*/
-    var remember: Boolean = false,
-    /** checkbox recordarme*/
     var isLoaderEnable: Boolean = false
 ) {
     fun isNotEmpty(): Boolean {

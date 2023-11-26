@@ -91,7 +91,6 @@ fun RegisterBody(
             .imePadding()
             .verticalScroll(rememberScrollState())
             .fillMaxHeight()
-//            .weight(weight =1f, fill = false)
 
     ) {
         /** Header */

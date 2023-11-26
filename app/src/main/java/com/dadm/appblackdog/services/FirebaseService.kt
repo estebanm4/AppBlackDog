@@ -24,24 +24,20 @@ class FirebaseService {
         auth = Firebase.auth
     }
 
-    suspend fun emailLogin(data: UiLogin, context: Context): Boolean {
-//        init()
-        var isSuccess = false
-        try {
-            auth.signInWithEmailAndPassword(data.email, data.password)
-                .addOnCompleteListener(context as Activity) { task ->
-                    isSuccess = task.isSuccessful
-                    if (task.isSuccessful) {
-                        Log.d(GENERIC_TAG, "auth result: success")
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(GENERIC_TAG, "auth result: failure", task.exception)
-                    }
-                }.await()
+    suspend fun emailLogin(data: UiLogin): Boolean {
+        return try {
+            val snapshot = auth.signInWithEmailAndPassword(data.email, data.password)
+            snapshot.await()
+            if (snapshot.isSuccessful)
+                Log.d(GENERIC_TAG, "auth result: success")
+            else
+                Log.w(GENERIC_TAG, "auth result: failure", snapshot.exception)
+            snapshot.isSuccessful
         } catch (e: Exception) {
             Log.e(GENERIC_TAG, "fatal error $e")
+            false
         }
-        return isSuccess
+
     }
 
     suspend fun addNewUser(email: String, password: String): FirebaseUser? {

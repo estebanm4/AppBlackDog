@@ -17,6 +17,6 @@ class Constants {
 
         /** TEST DATA */
         const val EMAIL = "test@test.com"
-        const val PASS = "test2023"
+        const val PASS = "test123"
     }
 }

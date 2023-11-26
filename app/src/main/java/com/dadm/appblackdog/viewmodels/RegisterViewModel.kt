@@ -129,7 +129,7 @@ class RegisterViewModel(
                     ownerRepository.cleanOwners()
                     // insert new owner data
                     ownerRepository.insertOwner(ownerDb)
-                    Log.d(GENERIC_TAG, "Login process end ************")
+                    Log.d(GENERIC_TAG, "Register process end ************")
                 }
             }
         } else {
