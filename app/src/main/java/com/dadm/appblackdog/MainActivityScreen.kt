@@ -48,7 +48,7 @@ fun MainActivityScreen() {
         Scaffold(
             modifier = modifier,
             topBar = {
-                MainAppBar(scrollBehavior = scrollBehavior, drawerState = drawerState)
+                MainAppBar(drawerState = drawerState)
             }
         ) { padding ->
             NavHost(
@@ -57,7 +57,7 @@ fun MainActivityScreen() {
                 modifier = Modifier.padding(padding),
             ) {
                 composable(BlackDogNavigationRoutes.UserData.name) {
-                    UserDataScreen(navController = navController)
+                    UserDataScreen(navController = navController, drawerState = drawerState)
                 }
                 composable(BlackDogNavigationRoutes.Map.name) {
                     MapScreen(action = { navController.navigate(BlackDogNavigationRoutes.Recipes.name) })
