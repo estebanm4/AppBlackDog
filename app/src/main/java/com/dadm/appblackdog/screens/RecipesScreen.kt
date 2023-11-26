@@ -62,6 +62,6 @@ fun RecipesScreen(
 @Composable
 fun RecipesScreenPreview() {
     AppBlackDogTheme {
-        UserDataScreen(action = {})
+        RecipesScreen(action = {})
     }
 }

@@ -68,6 +68,6 @@ fun InfoScreen(
 @Composable
 fun InfoScreenPreview() {
     AppBlackDogTheme {
-        UserDataScreen(action = {})
+        InfoScreen(action = {})
     }
 }

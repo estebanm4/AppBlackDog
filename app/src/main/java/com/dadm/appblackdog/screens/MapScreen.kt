@@ -61,6 +61,6 @@ fun MapScreen(
 @Composable
 fun MapScreenPreview() {
     AppBlackDogTheme {
-        UserDataScreen(action = {})
+        MapScreen(action = {})
     }
 }

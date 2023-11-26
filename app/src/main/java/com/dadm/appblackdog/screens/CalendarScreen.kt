@@ -61,6 +61,6 @@ fun CalendarScreen(
 @Composable
 fun CalendarScreenPreview() {
     AppBlackDogTheme {
-        UserDataScreen(action = {})
+        CalendarScreen(action = {})
     }
 }

@@ -16,13 +16,17 @@
     <string name="invalid_email">Email no valido</string>
     <string name="invalid_password">La contraseña es muy corta</string>
     <string name="invalid_password_confirm">La contraseña no coincide</string>
-<!--    common use-->
+    <!--    Navigation and screen labels-->
+    <string name="my_pets">Mis Mascotas</string>
+    <string name="map_label">Puntos De Interes</string>
+    <string name="recipes">Recetas</string>
+    <string name="calendar">Agenda</string>
+    <string name="more_info">Informacion Adicional</string>
+    <!--    common use-->
     <string name="name">Nombre</string>
     <string name="lastname">Apellido</string>
     <string name="required_field">Campo obligatorio</string>
     <string name="required">Obligatorio</string>
-
-
     <!--    server messages-->
     <string name="form_error">Error de datos ingresados</string>
     <string name="server_error">Error al conectarse, verifica que los datos enviados sean correctos</string>
@@ -33,6 +37,6 @@
     <string name="cancel">Cancelar</string>
     <string name="finish_button">Regresar al inicio</string>
     <string name="create_user">Crear</string>
-
+    <!--default -->
     <string name="default_description">image</string>
 </resources>

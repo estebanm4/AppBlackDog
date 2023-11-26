@@ -1,9 +1,16 @@
 package com.dadm.appblackdog
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,6 +19,8 @@ import com.dadm.appblackdog.screens.InfoScreen
 import com.dadm.appblackdog.screens.MapScreen
 import com.dadm.appblackdog.screens.RecipesScreen
 import com.dadm.appblackdog.screens.UserDataScreen
+import com.dadm.appblackdog.ui_elements.CustomDrawer
+import com.dadm.appblackdog.ui_elements.MainAppBar
 
 enum class BlackDogsScreen {
     UserData,
@@ -21,39 +30,51 @@ enum class BlackDogsScreen {
     Info
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainActivityScreen(
-    modifier: Modifier = Modifier
-) {
+fun MainActivityScreen() {
     val navController = rememberNavController()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    Scaffold { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = BlackDogsScreen.UserData.name,
-            modifier = modifier.padding(padding)
-        ) {
-            composable(BlackDogsScreen.UserData.name) {
-                UserDataScreen(action = { navController.navigate(BlackDogsScreen.Map.name) })
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { CustomDrawer(navController) }
+    ) {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                MainAppBar(scrollBehavior = scrollBehavior, drawerState = drawerState)
             }
-            composable(BlackDogsScreen.Map.name) {
-                MapScreen(action = { navController.navigate(BlackDogsScreen.Recipes.name) })
+        ) { padding ->
+            NavHost(
+                navController = navController,
+                startDestination = BlackDogsScreen.UserData.name,
+                modifier = Modifier.padding(padding),
+            ) {
+                composable(BlackDogsScreen.UserData.name) {
+                    UserDataScreen(action = { navController.navigate(BlackDogsScreen.Map.name) })
+                }
+                composable(BlackDogsScreen.Map.name) {
+                    MapScreen(action = { navController.navigate(BlackDogsScreen.Recipes.name) })
+                }
+                composable(BlackDogsScreen.Recipes.name) {
+                    RecipesScreen(action = { navController.navigate(BlackDogsScreen.Calendar.name) })
+                }
+                composable(BlackDogsScreen.Calendar.name) {
+                    CalendarScreen(action = { navController.navigate(BlackDogsScreen.Info.name) })
+                }
+                composable(BlackDogsScreen.Info.name) {
+                    InfoScreen(action = {
+                        navController.popBackStack(
+                            BlackDogsScreen.UserData.name,
+                            inclusive = false
+                        )
+                    })
+                }
             }
-            composable(BlackDogsScreen.Recipes.name) {
-                RecipesScreen(action = { navController.navigate(BlackDogsScreen.Calendar.name) })
-            }
-            composable(BlackDogsScreen.Calendar.name) {
-                CalendarScreen(action = { navController.navigate(BlackDogsScreen.Info.name) })
-            }
-            composable(BlackDogsScreen.Info.name) {
-                InfoScreen(action = {
-                    navController.popBackStack(
-                        BlackDogsScreen.UserData.name,
-                        inclusive = false
-                    )
-                })
-            }
+
         }
-
     }
 }

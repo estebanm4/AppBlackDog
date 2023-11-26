@@ -152,7 +152,7 @@ class SplashViewModel(
         loadIsRun = false
     }
 
-    private fun isUserLogin(): Boolean = false
+    private fun isUserLogin(): Boolean = true
     private fun navigateToLogin(context: Context) {
 //        val context = LocalContext.current
         context.startActivity(Intent(context, LoginActivity::class.java))
