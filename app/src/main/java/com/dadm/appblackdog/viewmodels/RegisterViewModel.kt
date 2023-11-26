@@ -64,11 +64,15 @@ class RegisterViewModel(
         }
     }
 
-    fun validateForm(context: Context) {
+    private fun showLoader(show: Boolean) {
+        _uiState.update { it.copy(isLoaderEnable = show) }
+    }
 
-        if (_uiState.value.validateForm())
+    fun validateForm(context: Context) {
+        showLoader(true)
+        if (_uiState.value.validateForm()) {
             viewModelScope.launch { createUser(context) }
-        else {
+        } else {
             _uiState.update {
                 it.copy(
                     emailError = !it.validateEmail(),
@@ -78,6 +82,7 @@ class RegisterViewModel(
                     lastnameError = it.lastname.isEmpty(),
                 )
             }
+            showLoader(false)
         }
     }
 
@@ -131,7 +136,6 @@ class RegisterViewModel(
                 Toast.LENGTH_SHORT
             ).show()
         }
-
-
+        showLoader(false)
     }
 }

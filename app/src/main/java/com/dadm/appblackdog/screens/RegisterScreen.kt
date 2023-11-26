@@ -1,6 +1,7 @@
 package com.dadm.appblackdog.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -52,7 +54,19 @@ fun RegisterScreen(
     val uiState by registerViewModel.uiState.collectAsState()
 
     // UI
-    RegisterBody(uiState, registerViewModel)
+    if (uiState.isLoaderEnable)
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.width(64.dp),
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
+        }
+    else
+        RegisterBody(uiState, registerViewModel)
 
 }
 
@@ -184,6 +198,7 @@ fun RegisterForm(uiState: UiRegister, registerViewModel: RegisterViewModel?) {
         )
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
