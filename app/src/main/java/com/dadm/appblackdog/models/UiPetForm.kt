@@ -8,6 +8,7 @@ data class UiPetForm(
     var weight: String = "",
     var measureUnit: String = "",
     var birthdate: String = "",
+    var birthdateTimeStamp: Long = 0,
     var photoUrl: String = "",
     var ageRangeId: String = "",
     var measureUnitId: String = "",
@@ -19,8 +20,14 @@ data class UiPetForm(
     var isLoader: Boolean = false,
     var nameError: Boolean = false,
     var weightError: Boolean = false,
+    var measureUnitError: Boolean = false,
     var birthdateError: Boolean = false,
     var ageRangeError: Boolean = false,
     var breedError: Boolean = false,
 ) {
+
+    fun validateForm(): Boolean {
+        return name.isNotEmpty() && breedId.isNotEmpty() && ageRangeId.isNotEmpty() &&
+                weight.isNotEmpty() && measureUnitId.isNotEmpty() && birthdateTimeStamp != 0L && birthdate.isNotEmpty()
+    }
 }

@@ -1,7 +1,6 @@
 package com.dadm.appblackdog.viewmodels
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,17 +14,14 @@ import com.dadm.appblackdog.models.UiPetForm
 import com.dadm.appblackdog.services.FirebaseService
 import com.dadm.appblackdog.services.GENERIC_TAG
 import com.dadm.appblackdog.utils.Constants
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -92,35 +88,78 @@ class PetScreenViewModel(
     }
 
     fun updateWeight(data: String) {
-        _uiState.update { state -> state.copy(weight = data) }
+        _uiState.update { state -> state.copy(weight = data, weightError = data.isEmpty()) }
     }
 
     fun updateMeasureUnitId(data: String) {
-        //todo agregar logica
-        _uiState.update { state -> state.copy(measureUnitId = data, measureUnit = data) }
+        val measureUnit = measureUnitList.first { it.abr == data }
+        _uiState.update { state ->
+            state.copy(
+                measureUnitId = measureUnit.serverId,
+                measureUnit = measureUnit.abr,
+                measureUnitError = false
+            )
+        }
     }
 
     fun updateBreedId(data: String) {
-        //todo agregar logica
-        _uiState.update { state -> state.copy(breedId = data, breed = data) }
+        val breed = breedList.first { it.name == data }
+        _uiState.update { state ->
+            state.copy(
+                breedId = breed.serverId,
+                breed = breed.name,
+                breedError = false
+            )
+        }
     }
 
     fun updateAgeRangeId(data: String) {
-        //todo agregar logica
-        _uiState.update { state -> state.copy(ageRangeId = data, ageRange = data) }
+        val ageRange = ageRangeList.first { it.description == data }
+        _uiState.update { state ->
+            state.copy(
+                ageRangeId = ageRange.serverId,
+                ageRange = ageRange.description,
+                ageRangeError = false
+            )
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
     fun updateBirthday(data: String) {
         var value = ""
+        var time = 0L
         if (data.isNotEmpty()) {
             val date = Date(data.toLong() + 46400000)
             value = SimpleDateFormat("dd/MM/yyyy").format(date)
+            time = data.toLong()
         }
-        _uiState.update { state -> state.copy(birthdate = value) }
+        _uiState.update { state ->
+            state.copy(
+                birthdate = value,
+                birthdateTimeStamp = time,
+                birthdateError = time == 0L
+            )
+        }
     }
 
-    fun validateForm(context: Context) {
+    fun validateForm() {
+        if (_uiState.value.validateForm()) {
+            viewModelScope.launch { createPet() }
+        } else {
+            _uiState.update { ui ->
+                ui.copy(
+                    nameError = ui.name.isEmpty(),
+                    breedError = ui.breedId.isEmpty(),
+                    ageRangeError = ui.ageRangeId.isEmpty(),
+                    weightError = ui.weight.isEmpty(),
+                    measureUnitError = ui.measureUnitId.isEmpty(),
+                    birthdateError = ui.birthdateTimeStamp == 0L
+                )
+            }
+        }
+    }
+
+    private suspend fun createPet() {
 
     }
 }

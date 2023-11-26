@@ -72,7 +72,7 @@ fun WithoutPetsScreen(
             GenericSpacer()
             Text(
                 text = stringResource(id = R.string.without_pets_description),
-                color = Color.LightGray,
+                color = Color.Gray,
                 textAlign = TextAlign.Center
             )
             GenericSpacer(space = 8.dp)

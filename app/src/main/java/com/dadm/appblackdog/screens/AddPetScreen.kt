@@ -39,7 +39,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.dadm.appblackdog.R
 import com.dadm.appblackdog.models.BlackDogNavigationRoutes
@@ -52,7 +51,6 @@ import com.dadm.appblackdog.ui_elements.CustomInputText
 import com.dadm.appblackdog.ui_elements.CustomUnitField
 import com.dadm.appblackdog.ui_elements.GenericSpacer
 import com.dadm.appblackdog.ui_elements.MainAppBar
-import com.dadm.appblackdog.viewmodels.AppViewModelProvider
 import com.dadm.appblackdog.viewmodels.PetScreenViewModel
 
 @Composable
@@ -113,7 +111,6 @@ fun AddPetBody(
     uiState: UiPetForm,
     navController: NavController,
 ) {
-    val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -149,7 +146,7 @@ fun AddPetBody(
             }
             /** create button */
             Button(
-                onClick = { petViewModel?.validateForm(context) },
+                onClick = { petViewModel?.validateForm() },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
                 modifier = Modifier
@@ -184,6 +181,7 @@ fun AddPetForm(
         /** breed selector */
         CustomDropDownField(
             value = uiState.breed,
+            error = uiState.breedError,
             icon = Icons.Default.Bloodtype,
             label = stringResource(id = R.string.breed),
             items = uiState.breedList,
@@ -192,6 +190,7 @@ fun AddPetForm(
         /** age range selector */
         CustomDropDownField(
             value = uiState.ageRange,
+            error = uiState.ageRangeError,
             icon = Icons.Default.Numbers,
             label = stringResource(id = R.string.age_range),
             items = uiState.ageRangeList,
@@ -201,6 +200,8 @@ fun AddPetForm(
         CustomUnitField(
             value = uiState.weight,
             valueSelector = uiState.measureUnit,
+            error = uiState.weightError,
+            selectorError = uiState.measureUnitError,
             label = stringResource(id = R.string.weight),
             selectorLabel = stringResource(id = R.string.unit),
             items = uiState.measureUnitList,
@@ -212,6 +213,7 @@ fun AddPetForm(
 
         CustomDateField(
             value = uiState.birthdate,
+            error = uiState.birthdateError,
             label = stringResource(id = R.string.birthday),
             icon = Icons.Default.CalendarMonth,
             onResult = { data -> petViewModel?.updateBirthday(data) }
@@ -222,7 +224,9 @@ fun AddPetForm(
             icon = Icons.Default.Description,
             label = stringResource(id = R.string.description),
             onChange = { data -> petViewModel?.updateDescription(data) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isLastField = true,
+            submit = { petViewModel?.validateForm() }
         )
     }
 }

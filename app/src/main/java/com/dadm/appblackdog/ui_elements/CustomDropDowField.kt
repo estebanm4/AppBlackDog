@@ -21,7 +21,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.dadm.appblackdog.R
 import com.dadm.appblackdog.ui.theme.primaryRed
 
 @Composable
@@ -31,14 +33,16 @@ fun CustomDropDownField(
     items: MutableList<String>,
     label: String = "",
     onItemChange: (String) -> Unit,
-) {
+    error: Boolean = false,
+    errorLabel: String = "$label ${stringResource(id = R.string.required)}",
+    ) {
     var expanded by remember { mutableStateOf(false) }
 
     val leadingIcon = @Composable {
         Icon(
             imageVector = icon,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.primary
+            tint = if (error) primaryRed else MaterialTheme.colorScheme.primary
         )
     }
     val trailingIcon = @Composable {
@@ -46,7 +50,7 @@ fun CustomDropDownField(
             Icon(
                 Icons.Default.ArrowDropDown,
                 contentDescription = "",
-                tint = MaterialTheme.colorScheme.primary
+                tint = if (error) primaryRed else MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -55,10 +59,11 @@ fun CustomDropDownField(
     ) {
         OutlinedTextField(
             value = value,
+            isError = error,
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
-            label = { Text(label) },
-            placeholder = { Text(label) },
+            label = { Text(if (error) errorLabel else label) },
+            placeholder = { Text(if (error) errorLabel else label) },
             singleLine = true,
             onValueChange = {},
             trailingIcon = trailingIcon,

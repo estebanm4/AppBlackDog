@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.dadm.appblackdog.R
+import com.dadm.appblackdog.ui.theme.primaryRed
 
 @Composable
 fun CustomDateField(
@@ -29,6 +30,8 @@ fun CustomDateField(
     icon: ImageVector,
     label: String = "",
     onResult: (String) -> Unit,
+    error: Boolean = false,
+    errorLabel: String = "$label ${stringResource(id = R.string.required)}",
 ) {
     var openAlertDialog by remember { mutableStateOf(false) }
 
@@ -38,7 +41,8 @@ fun CustomDateField(
         ) {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = stringResource(id = R.string.default_description)
+                contentDescription = stringResource(id = R.string.default_description),
+                tint = if (error) primaryRed else MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -46,16 +50,17 @@ fun CustomDateField(
         Icon(
             imageVector = icon,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.primary
+            tint = if (error) primaryRed else MaterialTheme.colorScheme.primary
         )
     }
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
+        isError = error,
         onValueChange = {},
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
-        label = { Text(label) },
+        label = { Text(if (error) errorLabel else label) },
         readOnly = true
         //            enabled = false
     )
