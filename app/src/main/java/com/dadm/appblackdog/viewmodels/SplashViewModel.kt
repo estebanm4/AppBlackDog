@@ -12,10 +12,12 @@ import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.BreedRepository
 import com.dadm.appblackdog.database.data.MeasureUnitRepository
 import com.dadm.appblackdog.database.data.OwnerRepository
+import com.dadm.appblackdog.database.data.RecipeRepository
 import com.dadm.appblackdog.models.AgeRange
 import com.dadm.appblackdog.models.Breed
 import com.dadm.appblackdog.models.MeasureUnit
 import com.dadm.appblackdog.models.Owner
+import com.dadm.appblackdog.models.Recipe
 import com.dadm.appblackdog.models.UiSplash
 import com.dadm.appblackdog.services.GENERIC_TAG
 import com.dadm.appblackdog.services.FirebaseService
@@ -36,6 +38,7 @@ class SplashViewModel(
     private val breedRepository: BreedRepository,
     private val measureUnitRepository: MeasureUnitRepository,
     private val ownerRepository: OwnerRepository,
+    private val recipeRepository: RecipeRepository,
     private val firebaseService: FirebaseService,
 ) : ViewModel() {
 
@@ -58,6 +61,7 @@ class SplashViewModel(
         launch(Dispatchers.IO) { getAndSaveAgeRanges() }
         launch(Dispatchers.IO) { getAndSaveBreeds() }
         launch(Dispatchers.IO) { getAndSaveMeasureUnits() }
+        launch(Dispatchers.IO) { getAndSaveRecipes() }
         launch(Dispatchers.IO) { firebaseService.init() }
         val users = async(Dispatchers.IO) { ownerRepository.getOwnerStream().first() }.await()
         _uiState.update { ui -> ui.copy(navigate = true, isUserLogin = users.isNotEmpty()) }
@@ -101,7 +105,7 @@ class SplashViewModel(
         var success = false
         // get age ranges
         val breeds = firebaseService.getData(Constants.BREEDS_TABLE_NAME)
-        Log.d(GENERIC_TAG, "rangos de edad desde el servidor: ${breeds?.size}")
+        Log.d(GENERIC_TAG, "razas desde el servidor: ${breeds?.size}")
         // when server return data generate a valid list to send to db
         if (!breeds.isNullOrEmpty())
             breeds.map {
@@ -146,6 +150,34 @@ class SplashViewModel(
         // save agesRanges in db
         if (measureUnitSaveList.isNotEmpty()) {
             measureUnitRepository.insertMultipleMeasureUnit(data = measureUnitSaveList)
+            success = true
+        }
+        return success
+    }
+    /** measure units server and db process */
+    private suspend fun getAndSaveRecipes(): Boolean {
+        //variables
+        val recipeSaveList = mutableListOf<Recipe>()
+        var success = false
+        // get age ranges
+        val recipes = firebaseService.getData(Constants.RECIPE_TABLE_NAME)
+        Log.d(GENERIC_TAG, "recetas el servidor: ${recipes?.size}")
+        // when server return data generate a valid list to send to db
+        if (!recipes.isNullOrEmpty())
+            recipes.map {
+                recipeSaveList.add(
+                    Recipe(
+                        serverId = it.id,
+                        name = it.data["name"] as String? ?: "",
+                        description = it.data["description"] as String? ?: "",
+                        items = it.data["items"] as String? ?: "",
+                        imageUrl = it.data["imageUrl"] as String? ?: "",
+                    )
+                )
+            }
+        // save agesRanges in db
+        if (recipeSaveList.isNotEmpty()) {
+            recipeRepository.insertMultipleRecipe(data = recipeSaveList)
             success = true
         }
         return success

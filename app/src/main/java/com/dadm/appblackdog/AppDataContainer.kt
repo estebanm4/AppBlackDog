@@ -12,6 +12,8 @@ import com.dadm.appblackdog.database.data.OwnerOfflineRepository
 import com.dadm.appblackdog.database.data.OwnerRepository
 import com.dadm.appblackdog.database.data.PetOfflineRepository
 import com.dadm.appblackdog.database.data.PetRepository
+import com.dadm.appblackdog.database.data.RecipeOfflineRepository
+import com.dadm.appblackdog.database.data.RecipeRepository
 import com.dadm.appblackdog.services.FirebaseService
 
 interface AppContainer {
@@ -20,6 +22,7 @@ interface AppContainer {
     val breedRepository: BreedRepository
     val measureUnitRepository: MeasureUnitRepository
     val petRepository: PetRepository
+    val recipeRepository: RecipeRepository
     val firebaseService: FirebaseService
 }
 
@@ -43,6 +46,10 @@ class AppDataContainer(private val context: Context) : AppContainer {
 
     override val petRepository: PetRepository by lazy {
         PetOfflineRepository(AppBlackDogDatabase.getDatabase(context).petDao())
+    }
+
+    override val recipeRepository: RecipeRepository by lazy {
+        RecipeOfflineRepository(AppBlackDogDatabase.getDatabase(context).recipeDao())
     }
 
     override val firebaseService: FirebaseService by lazy {

@@ -10,6 +10,7 @@ class Constants {
         const val MEASURE_UNIT_TABLE_NAME = "measureUnits"
         const val BREEDS_TABLE_NAME = "breeds"
         const val AGE_RANGES_TABLE_NAME = "ageRanges"
+        const val RECIPE_TABLE_NAME = "recipes"
         /** TYPES */
         const val TYPE_WEIGHT = "peso"
         const val TYPE_VOLUME = "volumen"

@@ -9,19 +9,22 @@ import com.dadm.appblackdog.database.data.BreedDao
 import com.dadm.appblackdog.database.data.MeasureUnitDao
 import com.dadm.appblackdog.database.data.OwnerDao
 import com.dadm.appblackdog.database.data.PetDao
+import com.dadm.appblackdog.database.data.RecipeDao
 import com.dadm.appblackdog.models.AgeRange
 import com.dadm.appblackdog.models.Breed
 import com.dadm.appblackdog.models.MeasureUnit
 import com.dadm.appblackdog.models.Owner
 import com.dadm.appblackdog.models.Pet
+import com.dadm.appblackdog.models.Recipe
 
-@Database(entities = [Owner::class, AgeRange::class, Breed::class, MeasureUnit::class, Pet::class], version = 9, exportSchema = false)
+@Database(entities = [Owner::class, AgeRange::class, Breed::class, MeasureUnit::class, Pet::class, Recipe::class], version = 10, exportSchema = false)
 abstract class AppBlackDogDatabase : RoomDatabase() {
     abstract fun ownerDao(): OwnerDao
     abstract fun ageRangeDao(): AgeRangeDao
     abstract fun breedDao(): BreedDao
     abstract fun measureUnitDao(): MeasureUnitDao
     abstract fun petDao(): PetDao
+    abstract fun recipeDao(): RecipeDao
 
     companion object {
         @Volatile
