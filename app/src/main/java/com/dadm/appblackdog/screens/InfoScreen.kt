@@ -32,9 +32,7 @@ import com.dadm.appblackdog.ui.theme.AppBlackDogTheme
 @Composable
 fun InfoScreen(
     action: () -> Unit,
-
     ) {
-    val context = LocalContext.current
     //content
     Column(
         verticalArrangement = Arrangement.Center,

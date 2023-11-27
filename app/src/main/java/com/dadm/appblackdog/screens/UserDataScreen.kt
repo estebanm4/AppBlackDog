@@ -36,48 +36,17 @@ fun UserDataScreen(
     drawerState: DrawerState,
     petViewModel: PetAddViewModel?,
 ) {
-    val scope = rememberCoroutineScope()
-
     //content
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                contentColor = MaterialTheme.colorScheme.primary,
-                onClick = {
-                    petViewModel?.init()
-                    navController.navigate(BlackDogNavigationRoutes.AddPet.name)
-                }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.default_description)
-                )
-            }
-        },
-        topBar = {
-            MainAppBar(
-                label = stringResource(id = R.string.my_pets),
-                trailingIcon = Icons.Default.ViewList,
-                leadingAction = {
-                    scope.launch {
-                        drawerState.apply {
-                            if (isClosed) open() else close()
-                        }
-                    }
-                },
-                trailingAction = {}
-            )
-        }
-    ) { padding ->
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            WithoutPetsScreen()
-        }
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+//            WithoutPetsScreen(navController, drawerState, petViewModel)
+        PetProfileScreen(navController, drawerState, petViewModel)
     }
+
 }
 
 @Preview(showBackground = true)
