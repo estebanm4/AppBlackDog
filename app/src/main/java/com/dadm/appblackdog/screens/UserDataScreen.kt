@@ -5,9 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,10 +40,23 @@ fun UserDataScreen(
 
     //content
     Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                contentColor = MaterialTheme.colorScheme.primary,
+                onClick = {
+                    petViewModel?.init()
+                    navController.navigate(BlackDogNavigationRoutes.AddPet.name)
+                }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.default_description)
+                )
+            }
+        },
         topBar = {
             MainAppBar(
                 label = stringResource(id = R.string.my_pets),
-                trailingIcon = Icons.Default.AddCircle,
+                trailingIcon = Icons.Default.ViewList,
                 leadingAction = {
                     scope.launch {
                         drawerState.apply {
@@ -46,10 +64,7 @@ fun UserDataScreen(
                         }
                     }
                 },
-                trailingAction = {
-                    petViewModel?.init()
-                    navController.navigate(BlackDogNavigationRoutes.AddPet.name)
-                }
+                trailingAction = {}
             )
         }
     ) { padding ->
@@ -60,12 +75,7 @@ fun UserDataScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            WithoutPetsScreen(
-                actionButton = {
-                    petViewModel?.init()
-                    navController.navigate(BlackDogNavigationRoutes.AddPet.name)
-                }
-            )
+            WithoutPetsScreen()
         }
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
@@ -30,9 +31,7 @@ import com.dadm.appblackdog.R
 import com.dadm.appblackdog.ui_elements.GenericSpacer
 
 @Composable
-fun WithoutPetsScreen(
-    actionButton: () -> Unit = {},
-    ) {
+fun WithoutPetsScreen() {
     val titleTextSize =
         with(LocalDensity.current) { dimensionResource(id = R.dimen.title_large).toSp() }
     Surface {
@@ -72,10 +71,21 @@ fun WithoutPetsScreen(
                 color = Color.Gray,
                 textAlign = TextAlign.Center
             )
-            GenericSpacer(space = 8.dp)
-            OutlinedButton(onClick = actionButton) {
-                Text(text = stringResource(id = R.string.add_pet))
-            }
+            GenericSpacer()
+            GenericSpacer()
+            Image(
+                modifier = Modifier
+                    .size(150.dp)
+                    .graphicsLayer {
+                        this.rotationZ = 40f
+                    },
+                painter = painterResource(id = R.drawable.curve_arrow_right),
+                contentDescription = stringResource(id = R.string.default_description)
+            )
+//            GenericSpacer(space = 8.dp)
+//            OutlinedButton(onClick = actionButton) {
+//                Text(text = stringResource(id = R.string.add_pet))
+//            }
         }
     }
 }
