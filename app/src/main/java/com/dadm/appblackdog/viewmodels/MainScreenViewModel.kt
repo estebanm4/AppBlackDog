@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dadm.appblackdog.LoginActivity
-import com.dadm.appblackdog.MainActivity
 import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.BreedRepository
 import com.dadm.appblackdog.database.data.MeasureUnitRepository
@@ -38,7 +37,7 @@ class MainScreenViewModel(
     private val ownerRepository: OwnerRepository,
 ) : ViewModel() {
 
-    var loadData = true;
+    var loadData = true
 
     fun init() {
         if (loadData) {
@@ -54,10 +53,15 @@ class MainScreenViewModel(
     /**LogOut*/
 
     fun logOut(context: Context) {
-        // clean owner from last session
+        // clean session data
         viewModelScope.launch {
+            // clean user info in db
             ownerRepository.cleanOwners()
+            // clean pets
+            petRepository.cleanPets()
+            // end session in firebase auth
             firebaseService.userLogOut()
+            // navigate to register screen
             navigateToLogin(context)
         }
     }
@@ -109,7 +113,7 @@ class MainScreenViewModel(
         //variables
         val breedsSaveList = mutableListOf<Breed>()
         var success = false
-        // get age ranges
+        // get breeds from server
         val breeds = firebaseService.getData(Constants.BREEDS_TABLE_NAME)
         Log.d(GENERIC_TAG, "razas desde el servidor: ${breeds?.size}")
         // when server return data generate a valid list to send to db
@@ -123,7 +127,7 @@ class MainScreenViewModel(
                     )
                 )
             }
-        // save agesRanges in db
+        // save breeds in db
         if (breedsSaveList.isNotEmpty()) {
             breedRepository.insertMultipleBreed(data = breedsSaveList)
             success = true
@@ -136,7 +140,7 @@ class MainScreenViewModel(
         //variables
         val measureUnitSaveList = mutableListOf<MeasureUnit>()
         var success = false
-        // get age ranges
+        // get measure units from server
         val measureUnits = firebaseService.getData(Constants.MEASURE_UNIT_TABLE_NAME)
         Log.d(GENERIC_TAG, "unidades de medida desde el servidor: ${measureUnits?.size}")
         // when server return data generate a valid list to send to db
@@ -153,7 +157,7 @@ class MainScreenViewModel(
                     )
                 )
             }
-        // save agesRanges in db
+        // save measure units in db
         if (measureUnitSaveList.isNotEmpty()) {
             measureUnitRepository.insertMultipleMeasureUnit(data = measureUnitSaveList)
             success = true
@@ -166,7 +170,7 @@ class MainScreenViewModel(
         //variables
         val recipeSaveList = mutableListOf<Recipe>()
         var success = false
-        // get age ranges
+        // get recipes from server
         val recipes = firebaseService.getData(Constants.RECIPE_TABLE_NAME)
         Log.d(GENERIC_TAG, "recetas el servidor: ${recipes?.size}")
         // when server return data generate a valid list to send to db
@@ -182,7 +186,7 @@ class MainScreenViewModel(
                     )
                 )
             }
-        // save agesRanges in db
+        // save recipes in db
         if (recipeSaveList.isNotEmpty()) {
             recipeRepository.insertMultipleRecipe(data = recipeSaveList)
             success = true
@@ -195,7 +199,7 @@ class MainScreenViewModel(
         //variables
         val petSaveList = mutableListOf<Pet>()
         var success = false
-        // get age ranges
+        // get pets from server
         val pets = firebaseService.getDataByArgument(
             reference = Constants.PET_TABLE_NAME,
             argument = "ownerId",
@@ -220,7 +224,7 @@ class MainScreenViewModel(
                     )
                 )
             }
-        // save agesRanges in db
+        // save pets in db
         if (petSaveList.isNotEmpty()) {
             petRepository.insertMultiplePet(data = petSaveList)
             success = true

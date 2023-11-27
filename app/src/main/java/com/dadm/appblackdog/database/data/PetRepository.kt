@@ -20,9 +20,10 @@ interface PetRepository {
     suspend fun deletePet(data: Pet)
 
     suspend fun updatePet(data: Pet)
+    suspend fun cleanPets()
 }
 
-class PetOfflineRepository(private val dao: PetDao): PetRepository{
+class PetOfflineRepository(private val dao: PetDao) : PetRepository {
     override fun getAllPetStream(): Flow<List<Pet>> = dao.getAllItems()
 
     override fun getPetStream(serverId: String): Flow<Pet?> = dao.getItem(serverId)
@@ -59,6 +60,14 @@ class PetOfflineRepository(private val dao: PetDao): PetRepository{
     override suspend fun deletePet(data: Pet) = dao.delete(data)
 
     override suspend fun updatePet(data: Pet) = dao.update(data)
+    override suspend fun cleanPets() {
+        val localData = dao.getAllItems().first()
+        if (localData.isNotEmpty())
+            localData.map {
+                deletePet(it)
+            }
+        Log.d(GENERIC_TAG, "pets delete: ${localData.size}")
+    }
 
 
 }
