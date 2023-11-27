@@ -27,12 +27,14 @@ import com.dadm.appblackdog.screens.UserDataScreen
 import com.dadm.appblackdog.ui_elements.CustomDrawer
 import com.dadm.appblackdog.viewmodels.AppViewModelProvider
 import com.dadm.appblackdog.viewmodels.PetAddViewModel
+import com.dadm.appblackdog.viewmodels.RecipeViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityScreen(
     petViewModel: PetAddViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -69,7 +71,12 @@ fun MainActivityScreen(
                     MapScreen(navController = navController, drawerState = drawerState)
                 }
                 composable(BlackDogNavigationRoutes.Recipes.name) {
-                    RecipesScreen(navController = navController, drawerState = drawerState)
+                    recipeViewModel.init()
+                    RecipesScreen(
+                        drawerState = drawerState,
+                        recipeViewModel = recipeViewModel
+                    )
+
                 }
                 composable(BlackDogNavigationRoutes.Calendar.name) {
                     CalendarScreen(action = { })
@@ -85,7 +92,6 @@ fun MainActivityScreen(
                 composable(BlackDogNavigationRoutes.AddPet.name) {
                     AddPetScreen(navController = navController, petViewModel = petViewModel)
                 }
-
             }
 
         }

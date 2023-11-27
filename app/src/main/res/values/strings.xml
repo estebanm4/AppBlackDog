@@ -52,6 +52,7 @@
     <string name="finish_button">Regresar al inicio</string>
     <string name="create">Crear</string>
     <string name="add_pet">Agregar nueva mascota</string>
+    <string name="see_more">Ver mas</string>
     <!--default -->
     <string name="default_description">image</string>
 </resources>

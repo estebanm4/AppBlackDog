@@ -49,6 +49,12 @@ object AppViewModelProvider {
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }
+
+        initializer {
+            RecipeViewModel(
+                recipeRepository = inventoryApplication().container.recipeRepository,
+            )
+        }
     }
 }
 
