@@ -60,7 +60,7 @@ object AppViewModelProvider {
 
         initializer {
             InfoViewModel(
-//                petRepository = inventoryApplication().container.petRepository,
+                infoPostRepository = inventoryApplication().container.infoPostRepository,
             )
         }
 
@@ -73,6 +73,7 @@ object AppViewModelProvider {
                 petRepository = inventoryApplication().container.petRepository,
                 ownerRepository = inventoryApplication().container.ownerRepository,
                 infoPostRepository = inventoryApplication().container.infoPostRepository,
+                reminderRepository = inventoryApplication().container.reminderRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }

@@ -11,6 +11,6 @@ data class UiPetProfile(
     var photoUrl: String = "",
     var loader: Boolean = false,
     var loadInfo: Boolean = true,
-    var petList: List<String> = arrayListOf(""),
+    var namesList: List<String> = arrayListOf(""),
 ) {
 }

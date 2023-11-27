@@ -18,10 +18,12 @@ import com.dadm.appblackdog.models.MeasureUnit
 import com.dadm.appblackdog.models.Owner
 import com.dadm.appblackdog.models.Pet
 import com.dadm.appblackdog.models.Recipe
+import com.dadm.appblackdog.models.Reminder
+import com.dadm.appblackdog.database.data.ReminderDao
 
 @Database(
-    entities = [Owner::class, AgeRange::class, Breed::class, MeasureUnit::class, Pet::class, Recipe::class, InfoPost::class],
-    version = 12,
+    entities = [Owner::class, AgeRange::class, Breed::class, MeasureUnit::class, Pet::class, Recipe::class, InfoPost::class, Reminder::class],
+    version = 13,
     exportSchema = false
 )
 abstract class AppBlackDogDatabase : RoomDatabase() {
@@ -32,6 +34,7 @@ abstract class AppBlackDogDatabase : RoomDatabase() {
     abstract fun petDao(): PetDao
     abstract fun recipeDao(): RecipeDao
     abstract fun infoPostDao(): InfoPostDao
+    abstract fun reminderDao(): ReminderDao
 
     companion object {
         @Volatile

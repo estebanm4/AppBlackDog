@@ -86,7 +86,7 @@ fun PetProfileScreen(
     val cardRadius = 40.dp
 
     when {
-        uiState.loadInfo -> {
+        uiState.loadInfo || (profileViewModel?.pets?.isEmpty() ?: false) -> {
             profileViewModel?.refresh()
         }
     }
@@ -112,7 +112,7 @@ fun PetProfileScreen(
                     expanded = expandedMenu,
                     onDismissRequest = { expandedMenu = false }
                 ) {
-                    uiState.petList.forEach { item ->
+                    uiState.namesList.forEach { item ->
                         DropdownMenuItem(
                             modifier = Modifier.fillMaxWidth(),
                             text = { Text(text = item) },

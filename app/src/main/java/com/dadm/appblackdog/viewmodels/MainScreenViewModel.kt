@@ -14,12 +14,14 @@ import com.dadm.appblackdog.database.data.MeasureUnitRepository
 import com.dadm.appblackdog.database.data.OwnerRepository
 import com.dadm.appblackdog.database.data.PetRepository
 import com.dadm.appblackdog.database.data.RecipeRepository
+import com.dadm.appblackdog.database.data.ReminderRepository
 import com.dadm.appblackdog.models.AgeRange
 import com.dadm.appblackdog.models.Breed
 import com.dadm.appblackdog.models.InfoPost
 import com.dadm.appblackdog.models.MeasureUnit
 import com.dadm.appblackdog.models.Pet
 import com.dadm.appblackdog.models.Recipe
+import com.dadm.appblackdog.models.Reminder
 import com.dadm.appblackdog.services.FirebaseService
 import com.dadm.appblackdog.services.GENERIC_TAG
 import com.dadm.appblackdog.utils.Constants
@@ -36,6 +38,7 @@ class MainScreenViewModel(
     private val recipeRepository: RecipeRepository,
     private val petRepository: PetRepository,
     private val infoPostRepository: InfoPostRepository,
+    private val reminderRepository: ReminderRepository,
     private val firebaseService: FirebaseService,
     private val ownerRepository: OwnerRepository,
 ) : ViewModel() {
@@ -81,6 +84,7 @@ class MainScreenViewModel(
         launch(Dispatchers.IO) { getAndSaveMeasureUnits() }
         launch(Dispatchers.IO) { getAndSaveRecipes() }
         launch(Dispatchers.IO) { getAndSaveInfoPost() }
+        launch(Dispatchers.IO) { getAndSaveReminders() }
         launch(Dispatchers.IO) { getAndSavePets(ownerId) }
     }
 
@@ -239,8 +243,7 @@ class MainScreenViewModel(
         return success
     }
 
-
-    /** recipes server and db process */
+    /** info post server and db process */
     private suspend fun getAndSaveInfoPost(): Boolean {
         //variables
         val postSaveList = mutableListOf<InfoPost>()
@@ -262,6 +265,34 @@ class MainScreenViewModel(
         // save recipes in db
         if (postSaveList.isNotEmpty()) {
             infoPostRepository.insertMultipleInfoPost(data = postSaveList)
+            success = true
+        }
+        return success
+    }
+
+    /** info post server and db process */
+    private suspend fun getAndSaveReminders(): Boolean {
+        //variables
+        val reminderSaveList = mutableListOf<Reminder>()
+        var success = false
+        // get recipes from server
+        val reminders = firebaseService.getData(Constants.REMINDER_TABLE_NAME)
+        Log.d(GENERIC_TAG, "recordatorios desde el servidor: ${reminders?.size}")
+        // when server return data generate a valid list to send to db
+        if (!reminders.isNullOrEmpty())
+            reminders.map {
+                reminderSaveList.add(
+                    Reminder(
+                        serverId = it.id,
+                        name = it.data["name"] as String? ?: "",
+                        description = it.data["description"] as String? ?: "",
+                        time = it.data["time"] as Long? ?: 0L,
+                    )
+                )
+            }
+        // save recipes in db
+        if (reminderSaveList.isNotEmpty()) {
+            reminderRepository.insertMultipleReminder(data = reminderSaveList)
             success = true
         }
         return success

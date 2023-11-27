@@ -23,9 +23,10 @@ class PetProfileViewModel(
     private val _uiState = MutableStateFlow(UiPetProfile())
     val uiState: StateFlow<UiPetProfile> = _uiState.asStateFlow()
 
-    private var pets: List<Pet> = listOf()
+    var pets: List<Pet> = listOf()
 
     fun refresh() {
+        pets = listOf(Pet())
         _uiState.update { it.copy(loader = true, loadInfo = false) }
         viewModelScope.launch {
             loadData()
@@ -68,7 +69,7 @@ class PetProfileViewModel(
                     photoUrl = visiblePet.photoUrl,
                     birthday = Date(visiblePet.birthdate).toString(),
                     loader = false,
-                    petList = petsNames
+                    namesList = petsNames
                 )
             }
         }
