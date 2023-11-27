@@ -25,10 +25,10 @@ class RecipeViewModel(
 
     private var recipes: List<Recipe> = listOf()
     fun init() {
-        showLoader(true)
-//        if (recipes.isEmpty())
+        showLoader(false)
+        if (recipes.isEmpty())
             viewModelScope.launch { getData() }
-//        else updateUi(recipes.random())
+        else if (_uiState.value.imageUrl.isEmpty()) updateUi(recipes.random())
     }
 
     private suspend fun getData() = coroutineScope {
@@ -41,6 +41,7 @@ class RecipeViewModel(
     }
 
     private fun updateUi(data: Recipe) {
+        Log.d(GENERIC_TAG, "image recipe ${data.imageUrl}")
         val items = data.items.split(",")
         _uiState.update { ui ->
             ui.copy(
@@ -48,17 +49,16 @@ class RecipeViewModel(
                 description = data.description,
                 imageUrl = data.imageUrl,
                 items = items,
+                loader = false,
             )
         }
-        showLoader(false)
     }
 
-    private fun showLoader(show: Boolean) {
+    fun showLoader(show: Boolean) {
         _uiState.update { ui -> ui.copy(loader = show) }
     }
 
     fun reloadRecipe() {
-        showLoader(true)
         val list = recipes.filter { it.name != _uiState.value.name }
         if (list.isNotEmpty()) updateUi(list.random())
     }
