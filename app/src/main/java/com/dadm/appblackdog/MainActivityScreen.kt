@@ -66,10 +66,10 @@ fun MainActivityScreen(
                     )
                 }
                 composable(BlackDogNavigationRoutes.Map.name) {
-                    MapScreen(action = {})
+                    MapScreen(navController = navController, drawerState = drawerState)
                 }
                 composable(BlackDogNavigationRoutes.Recipes.name) {
-                    RecipesScreen(action = {})
+                    RecipesScreen(navController = navController, drawerState = drawerState)
                 }
                 composable(BlackDogNavigationRoutes.Calendar.name) {
                     CalendarScreen(action = { })

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.dadm.appblackdog.R
 
 @Composable
-fun CustomIconItem(icon: Painter, text: String) {
+fun CustomIconItem(icon: Painter, text: String, maxLines: Int = 1) {
 
     val textSize =
         with(LocalDensity.current) { dimensionResource(id = R.dimen.text_large).toSp() }
@@ -35,6 +35,6 @@ fun CustomIconItem(icon: Painter, text: String) {
             modifier = Modifier.size(32.dp)
         )
         Spacer(modifier = Modifier.size(20.dp))
-        Text(text = text, color = Color.White, fontSize = textSize, maxLines = 1)
+        Text(text = text, color = Color.White, fontSize = textSize, maxLines = maxLines)
     }
 }
