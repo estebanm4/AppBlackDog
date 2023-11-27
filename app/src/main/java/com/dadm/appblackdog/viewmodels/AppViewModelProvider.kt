@@ -65,6 +65,12 @@ object AppViewModelProvider {
         }
 
         initializer {
+            ReminderViewModel(
+                reminderRepository = inventoryApplication().container.reminderRepository,
+            )
+        }
+
+        initializer {
             MainScreenViewModel(
                 ageRangeRepository = inventoryApplication().container.ageRangeRepository,
                 breedRepository = inventoryApplication().container.breedRepository,

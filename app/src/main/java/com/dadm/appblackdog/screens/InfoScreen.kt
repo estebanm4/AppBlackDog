@@ -102,7 +102,6 @@ fun InfoScreenBody(uiState: UiInfoPost, padding: PaddingValues) {
 
     Column(
         modifier = Modifier
-//            .padding(42.dp)
             .fillMaxSize()
             .padding(padding)
             .verticalScroll(rememberScrollState()),
@@ -120,7 +119,7 @@ fun InfoScreenBody(uiState: UiInfoPost, padding: PaddingValues) {
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp
                 ),
-                shape = RoundedCornerShape(topStart = cardRadius),
+                shape = RoundedCornerShape(topStart = cardRadius, bottomStart = cardRadius),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                 ),

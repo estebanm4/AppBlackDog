@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 class InfoViewModel(
     private val infoPostRepository: InfoPostRepository,
     ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(UiInfoPost())
     val uiState: StateFlow<UiInfoPost> = _uiState.asStateFlow()
 

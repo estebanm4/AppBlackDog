@@ -31,6 +31,7 @@ import com.dadm.appblackdog.viewmodels.MainScreenViewModel
 import com.dadm.appblackdog.viewmodels.PetAddViewModel
 import com.dadm.appblackdog.viewmodels.PetProfileViewModel
 import com.dadm.appblackdog.viewmodels.RecipeViewModel
+import com.dadm.appblackdog.viewmodels.ReminderViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +42,7 @@ fun MainActivityScreen(
     recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory),
     profileViewModel: PetProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     infoViewModel: InfoViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    reminderViewModel: ReminderViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -90,10 +92,10 @@ fun MainActivityScreen(
 
                 }
                 composable(BlackDogNavigationRoutes.Calendar.name) {
-                    CalendarScreen(action = { })
+                    CalendarScreen(drawerState, reminderViewModel)
                 }
                 composable(BlackDogNavigationRoutes.Info.name) {
-                    InfoScreen(drawerState,infoViewModel)
+                    InfoScreen(drawerState, infoViewModel)
                 }
                 composable(BlackDogNavigationRoutes.AddPet.name) {
                     AddPetScreen(navController = navController, petViewModel = petViewModel)
