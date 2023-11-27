@@ -69,7 +69,7 @@ fun MapScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-//            BlackDogMap()
+            BlackDogMap()
         }
     }
 }

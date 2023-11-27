@@ -79,7 +79,6 @@ fun LoginForm(
 
     //variables
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val modifier = Modifier
         .padding(dimensionResource(id = R.dimen.padding_large))
         .fillMaxHeight()
@@ -113,16 +112,12 @@ fun LoginForm(
                 modifier = Modifier.fillMaxWidth(),
                 onChange = { data -> loginViewModel?.updatePassword(data) },
                 submit = {
-                    scope.launch {
-                        loginViewModel?.startLogin(context = context)
-                    }
+                    loginViewModel?.startLogin(context = context)
                 },
             )
             Button(
                 onClick = {
-                    scope.launch {
-                        loginViewModel?.startLogin(context = context)
-                    }
+                    loginViewModel?.startLogin(context = context)
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),

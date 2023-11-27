@@ -15,7 +15,7 @@ data class Pet(
     val ageRangeId: String = "",
     val description: String = "",
     val raceId: String = "",
-    val weight: Float = 0f,
+    val weight: String = "",
     val measureUnitId: String? = "",
     val birthdate: Long = 0L,
 ) {

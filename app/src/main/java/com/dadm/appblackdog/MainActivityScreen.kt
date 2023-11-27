@@ -26,6 +26,7 @@ import com.dadm.appblackdog.screens.RecipesScreen
 import com.dadm.appblackdog.screens.UserDataScreen
 import com.dadm.appblackdog.ui_elements.CustomDrawer
 import com.dadm.appblackdog.viewmodels.AppViewModelProvider
+import com.dadm.appblackdog.viewmodels.MainScreenViewModel
 import com.dadm.appblackdog.viewmodels.PetAddViewModel
 import com.dadm.appblackdog.viewmodels.RecipeViewModel
 
@@ -33,6 +34,7 @@ import com.dadm.appblackdog.viewmodels.RecipeViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityScreen(
+    mainScreenViewModel: MainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
     petViewModel: PetAddViewModel = viewModel(factory = AppViewModelProvider.Factory),
     recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -41,6 +43,9 @@ fun MainActivityScreen(
     val modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
+    when {
+        mainScreenViewModel.loadData -> mainScreenViewModel.init()
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
