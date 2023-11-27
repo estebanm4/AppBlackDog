@@ -17,6 +17,10 @@ object AppViewModelProvider {
         initializer {
             LoginViewModel(
                 ownerRepository = inventoryApplication().container.ownerRepository,
+                ageRangeRepository = inventoryApplication().container.ageRangeRepository,
+                breedRepository = inventoryApplication().container.breedRepository,
+                measureUnitRepository = inventoryApplication().container.measureUnitRepository,
+                recipeRepository = inventoryApplication().container.recipeRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }
@@ -25,11 +29,7 @@ object AppViewModelProvider {
         // Initializer for HomeViewModel
         initializer {
             SplashViewModel(
-                ageRangeRepository = inventoryApplication().container.ageRangeRepository,
-                breedRepository = inventoryApplication().container.breedRepository,
-                measureUnitRepository = inventoryApplication().container.measureUnitRepository,
                 ownerRepository = inventoryApplication().container.ownerRepository,
-                recipeRepository = inventoryApplication().container.recipeRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }
