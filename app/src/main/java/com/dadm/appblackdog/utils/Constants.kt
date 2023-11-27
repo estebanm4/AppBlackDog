@@ -11,6 +11,7 @@ class Constants {
         const val BREEDS_TABLE_NAME = "breeds"
         const val AGE_RANGES_TABLE_NAME = "ageRanges"
         const val RECIPE_TABLE_NAME = "recipes"
+        const val INFO_POST_TABLE_NAME = "infoPosts"
         /** TYPES */
         const val TYPE_WEIGHT = "peso"
         const val TYPE_VOLUME = "volumen"

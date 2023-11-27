@@ -9,12 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.dadm.appblackdog.LoginActivity
 import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.BreedRepository
+import com.dadm.appblackdog.database.data.InfoPostRepository
 import com.dadm.appblackdog.database.data.MeasureUnitRepository
 import com.dadm.appblackdog.database.data.OwnerRepository
 import com.dadm.appblackdog.database.data.PetRepository
 import com.dadm.appblackdog.database.data.RecipeRepository
 import com.dadm.appblackdog.models.AgeRange
 import com.dadm.appblackdog.models.Breed
+import com.dadm.appblackdog.models.InfoPost
 import com.dadm.appblackdog.models.MeasureUnit
 import com.dadm.appblackdog.models.Pet
 import com.dadm.appblackdog.models.Recipe
@@ -33,6 +35,7 @@ class MainScreenViewModel(
     private val measureUnitRepository: MeasureUnitRepository,
     private val recipeRepository: RecipeRepository,
     private val petRepository: PetRepository,
+    private val infoPostRepository: InfoPostRepository,
     private val firebaseService: FirebaseService,
     private val ownerRepository: OwnerRepository,
 ) : ViewModel() {
@@ -77,6 +80,7 @@ class MainScreenViewModel(
         launch(Dispatchers.IO) { getAndSaveBreeds() }
         launch(Dispatchers.IO) { getAndSaveMeasureUnits() }
         launch(Dispatchers.IO) { getAndSaveRecipes() }
+        launch(Dispatchers.IO) { getAndSaveInfoPost() }
         launch(Dispatchers.IO) { getAndSavePets(ownerId) }
     }
 
@@ -230,6 +234,34 @@ class MainScreenViewModel(
         // save pets in db
         if (petSaveList.isNotEmpty()) {
             petRepository.insertMultiplePet(data = petSaveList)
+            success = true
+        }
+        return success
+    }
+
+
+    /** recipes server and db process */
+    private suspend fun getAndSaveInfoPost(): Boolean {
+        //variables
+        val postSaveList = mutableListOf<InfoPost>()
+        var success = false
+        // get recipes from server
+        val posts = firebaseService.getData(Constants.INFO_POST_TABLE_NAME)
+        Log.d(GENERIC_TAG, "post desde el servidor: ${posts?.size}")
+        // when server return data generate a valid list to send to db
+        if (!posts.isNullOrEmpty())
+            posts.map {
+                postSaveList.add(
+                    InfoPost(
+                        serverId = it.id,
+                        name = it.data["name"] as String? ?: "",
+                        description = it.data["description"] as String? ?: "",
+                    )
+                )
+            }
+        // save recipes in db
+        if (postSaveList.isNotEmpty()) {
+            infoPostRepository.insertMultipleInfoPost(data = postSaveList)
             success = true
         }
         return success

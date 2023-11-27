@@ -59,6 +59,12 @@ object AppViewModelProvider {
         }
 
         initializer {
+            InfoViewModel(
+//                petRepository = inventoryApplication().container.petRepository,
+            )
+        }
+
+        initializer {
             MainScreenViewModel(
                 ageRangeRepository = inventoryApplication().container.ageRangeRepository,
                 breedRepository = inventoryApplication().container.breedRepository,
@@ -66,6 +72,7 @@ object AppViewModelProvider {
                 recipeRepository = inventoryApplication().container.recipeRepository,
                 petRepository = inventoryApplication().container.petRepository,
                 ownerRepository = inventoryApplication().container.ownerRepository,
+                infoPostRepository = inventoryApplication().container.infoPostRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }

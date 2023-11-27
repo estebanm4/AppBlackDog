@@ -6,6 +6,8 @@ import com.dadm.appblackdog.database.data.AgeRangeOfflineRepository
 import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.BreedOfflineRepository
 import com.dadm.appblackdog.database.data.BreedRepository
+import com.dadm.appblackdog.database.data.InfoPostOfflineRepository
+import com.dadm.appblackdog.database.data.InfoPostRepository
 import com.dadm.appblackdog.database.data.MeasureUnitOfflineRepository
 import com.dadm.appblackdog.database.data.MeasureUnitRepository
 import com.dadm.appblackdog.database.data.OwnerOfflineRepository
@@ -23,6 +25,7 @@ interface AppContainer {
     val measureUnitRepository: MeasureUnitRepository
     val petRepository: PetRepository
     val recipeRepository: RecipeRepository
+    val infoPostRepository: InfoPostRepository
     val firebaseService: FirebaseService
 }
 
@@ -50,6 +53,10 @@ class AppDataContainer(private val context: Context) : AppContainer {
 
     override val recipeRepository: RecipeRepository by lazy {
         RecipeOfflineRepository(AppBlackDogDatabase.getDatabase(context).recipeDao())
+    }
+
+    override val infoPostRepository: InfoPostRepository by lazy {
+        InfoPostOfflineRepository(AppBlackDogDatabase.getDatabase(context).infoPostDao())
     }
 
     override val firebaseService: FirebaseService by lazy {
