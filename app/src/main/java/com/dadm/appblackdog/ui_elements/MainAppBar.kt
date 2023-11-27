@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +47,7 @@ fun MainAppBar(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
         ),
         modifier = contentModifier
     ) {
@@ -63,7 +64,7 @@ fun MainAppBar(
                     modifier = Modifier.size(32.dp),
                     imageVector = leadingIcon,
                     contentDescription = stringResource(id = R.string.default_description),
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = Color.White
                 )
             }
             Text(
@@ -73,7 +74,7 @@ fun MainAppBar(
                 textAlign = TextAlign.Center,
                 fontSize = fontSize,
                 fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.primary,
+                color = Color.White,
                 text = label
             )
             Box(modifier = Modifier.weight(1f)) {
@@ -84,7 +85,7 @@ fun MainAppBar(
                         modifier = Modifier.size(32.dp),
                         imageVector = trailingIcon,
                         contentDescription = stringResource(id = R.string.default_description),
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = Color.White
                     )
                 }
             }
