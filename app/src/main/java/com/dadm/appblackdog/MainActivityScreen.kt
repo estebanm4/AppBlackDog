@@ -53,7 +53,8 @@ fun MainActivityScreen(
             CustomDrawer(
                 navController = navController,
                 navBackStackEntry = navBackStackEntry,
-                drawerState = drawerState
+                drawerState = drawerState,
+                mainScreenViewModel = mainScreenViewModel
             )
         }
     ) {

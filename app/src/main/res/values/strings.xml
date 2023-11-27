@@ -16,6 +16,7 @@
     <string name="invalid_email">Email no valido</string>
     <string name="invalid_password">La contraseña es muy corta</string>
     <string name="invalid_password_confirm">La contraseña no coincide</string>
+    <string name="log_out">Cerrar Sesión</string>
     <!--    Navigation and screen labels-->
     <string name="my_pets">Mis Mascotas</string>
     <string name="map_label">Puntos De Interes</string>

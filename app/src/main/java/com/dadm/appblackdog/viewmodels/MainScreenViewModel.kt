@@ -1,8 +1,13 @@
 package com.dadm.appblackdog.viewmodels
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dadm.appblackdog.LoginActivity
+import com.dadm.appblackdog.MainActivity
 import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.BreedRepository
 import com.dadm.appblackdog.database.data.MeasureUnitRepository
@@ -46,12 +51,24 @@ class MainScreenViewModel(
         }
     }
 
+    /**LogOut*/
+
+    fun logOut(context: Context) {
+        // clean owner from last session
+        viewModelScope.launch {
+            ownerRepository.cleanOwners()
+            firebaseService.userLogOut()
+            navigateToLogin(context)
+        }
+    }
+
+    private fun navigateToLogin(context: Context) {
+        context.startActivity(Intent(context, LoginActivity::class.java))
+        (context as Activity).finish()
+    }
+
     /** server methods */
     private suspend fun loadServerData(ownerId: String) = coroutineScope {
-//        getAndSaveAgeRanges()
-//        getAndSaveBreeds()
-//        getAndSaveMeasureUnits()
-//        getAndSaveRecipes()
         launch(Dispatchers.IO) { getAndSaveAgeRanges() }
         launch(Dispatchers.IO) { getAndSaveBreeds() }
         launch(Dispatchers.IO) { getAndSaveMeasureUnits() }

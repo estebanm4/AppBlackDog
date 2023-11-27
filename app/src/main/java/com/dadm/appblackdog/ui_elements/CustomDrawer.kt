@@ -6,8 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -20,18 +27,21 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.dadm.appblackdog.R
 import com.dadm.appblackdog.models.NavigationButton
+import com.dadm.appblackdog.viewmodels.MainScreenViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun CustomDrawer(
     navBackStackEntry: NavBackStackEntry?,
     navController: NavController,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    mainScreenViewModel: MainScreenViewModel?
 ) {
     val currentDestination = navBackStackEntry?.destination
     val scope = rememberCoroutineScope()
-
+    val context = LocalContext.current
     val items = listOf(
         NavigationButton.DogProfile,
         NavigationButton.Map,
@@ -54,6 +64,7 @@ fun CustomDrawer(
             ) {
 
             }
+            /** menu items */
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -61,10 +72,22 @@ fun CustomDrawer(
                     .padding(16.dp)
             ) {
                 items.forEach {
-                    DrawerButton(
-                        label = stringResource(it.resourceId),
-                        icon = it.icon,
-                        isSelected = currentDestination?.hierarchy?.any { destination ->
+                    NavigationDrawerItem(
+                        icon = {
+                            Icon(
+                                imageVector = it.icon,
+                                contentDescription = stringResource(id = R.string.default_description),
+                                tint = if (currentDestination?.hierarchy?.any { destination ->
+                                        destination.route == it.route
+                                    } == true)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        },
+                        label = { Text(text = stringResource(it.resourceId)) },
+                        selected = currentDestination?.hierarchy?.any { destination ->
                             destination.route == it.route
                         } == true,
                         onClick = {
@@ -89,6 +112,27 @@ fun CustomDrawer(
                         }
                     )
                 }
+
+            }
+            /** bottom menu */
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+                    .padding(16.dp)
+            ) {
+                NavigationDrawerItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Logout,
+                            contentDescription = stringResource(id = R.string.default_description),
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    },
+                    label = { Text(text = stringResource(R.string.log_out)) },
+                    selected = false,
+                    onClick = { mainScreenViewModel?.logOut(context) })
             }
         }
         Box(modifier = Modifier.weight(1f)) {}
@@ -100,5 +144,5 @@ fun CustomDrawer(
 @Composable
 fun CustomDrawerPreview() {
     val context = LocalContext.current
-    CustomDrawer(null, NavController(context), DrawerState(DrawerValue.Closed))
+    CustomDrawer(null, NavController(context), DrawerState(DrawerValue.Closed), null)
 }
