@@ -17,7 +17,7 @@ import com.dadm.appblackdog.models.Owner
 import com.dadm.appblackdog.models.Pet
 import com.dadm.appblackdog.models.Recipe
 
-@Database(entities = [Owner::class, AgeRange::class, Breed::class, MeasureUnit::class, Pet::class, Recipe::class], version = 10, exportSchema = false)
+@Database(entities = [Owner::class, AgeRange::class, Breed::class, MeasureUnit::class, Pet::class, Recipe::class], version = 11, exportSchema = false)
 abstract class AppBlackDogDatabase : RoomDatabase() {
     abstract fun ownerDao(): OwnerDao
     abstract fun ageRangeDao(): AgeRangeDao

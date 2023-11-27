@@ -28,6 +28,7 @@ import com.dadm.appblackdog.models.BlackDogNavigationRoutes
 import com.dadm.appblackdog.ui.theme.AppBlackDogTheme
 import com.dadm.appblackdog.ui_elements.MainAppBar
 import com.dadm.appblackdog.viewmodels.PetAddViewModel
+import com.dadm.appblackdog.viewmodels.PetProfileViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,6 +36,7 @@ fun UserDataScreen(
     navController: NavController,
     drawerState: DrawerState,
     petViewModel: PetAddViewModel?,
+    profileViewModel: PetProfileViewModel?,
 ) {
     //content
     Column(
@@ -44,7 +46,7 @@ fun UserDataScreen(
             .fillMaxSize()
     ) {
 //            WithoutPetsScreen(navController, drawerState, petViewModel)
-        PetProfileScreen(navController, drawerState, petViewModel)
+        PetProfileScreen(navController, drawerState, petViewModel,profileViewModel)
     }
 
 }
@@ -56,6 +58,7 @@ fun GreetingPreview() {
     AppBlackDogTheme {
         UserDataScreen(
             petViewModel = null,
+            profileViewModel = null,
             navController = NavController(context),
             drawerState = DrawerState(
                 DrawerValue.Closed

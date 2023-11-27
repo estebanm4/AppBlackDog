@@ -53,6 +53,12 @@ object AppViewModelProvider {
         }
 
         initializer {
+            PetProfileViewModel(
+                petRepository = inventoryApplication().container.petRepository,
+            )
+        }
+
+        initializer {
             MainScreenViewModel(
                 ageRangeRepository = inventoryApplication().container.ageRangeRepository,
                 breedRepository = inventoryApplication().container.breedRepository,

@@ -13,10 +13,13 @@ data class Pet(
     val name: String = "",
     val photoUrl: String = "",
     val ageRangeId: String = "",
+    val ageRange: String = "",
     val description: String = "",
-    val raceId: String = "",
+    val breedId: String = "",
+    val breed: String = "",
     val weight: String = "",
-    val measureUnitId: String? = "",
+    val measureUnitId: String = "",
+    val measureUnit: String = "",
     val birthdate: Long = 0L,
 ) {
 }

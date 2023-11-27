@@ -217,9 +217,12 @@ class MainScreenViewModel(
                         ownerId = it.data["ownerId"] as String? ?: "",
                         photoUrl = it.data["photoUrl"] as String? ?: "",
                         ageRangeId = it.data["ageRangeId"] as String? ?: "",
-                        raceId = it.data["raceId"] as String? ?: "",
+                        ageRange = it.data["ageRange"] as String? ?: "",
+                        breedId = it.data["breedId"] as String? ?: "",
+                        breed = it.data["breed"] as String? ?: "",
                         weight = it.data["weight"] as String? ?: "",
                         measureUnitId = it.data["measureUnitId"] as String? ?: "",
+                        measureUnit = it.data["measureUnit"] as String? ?: "",
                         birthdate = it.data["birthdate"] as Long? ?: 0L,
                     )
                 )

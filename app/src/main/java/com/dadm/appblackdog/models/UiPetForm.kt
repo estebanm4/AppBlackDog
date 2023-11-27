@@ -37,9 +37,12 @@ data class UiPetForm(
             "ownerId" to ownerId,
             "name" to name,
             "breedId" to breedId,
+            "breed" to breed,
             "ageRangeId" to ageRangeId,
-            "weight" to weight.toDouble(),
+            "ageRange" to ageRange,
+            "weight" to weight,
             "measureUnitId" to measureUnitId,
+            "measureUnit" to measureUnitId,
             "birthdate" to birthdateTimeStamp,
             "description" to description,
             "photoUrl" to photoUrl
