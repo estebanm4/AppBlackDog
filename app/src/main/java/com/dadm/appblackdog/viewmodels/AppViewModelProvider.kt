@@ -42,6 +42,7 @@ object AppViewModelProvider {
                 breedRepository = inventoryApplication().container.breedRepository,
                 measureUnitRepository = inventoryApplication().container.measureUnitRepository,
                 ownerRepository = inventoryApplication().container.ownerRepository,
+                petRepository = inventoryApplication().container.petRepository,
                 firebaseService = inventoryApplication().container.firebaseService,
             )
         }

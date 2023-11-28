@@ -13,6 +13,7 @@ import com.dadm.appblackdog.database.data.AgeRangeRepository
 import com.dadm.appblackdog.database.data.BreedRepository
 import com.dadm.appblackdog.database.data.MeasureUnitRepository
 import com.dadm.appblackdog.database.data.OwnerRepository
+import com.dadm.appblackdog.database.data.PetRepository
 import com.dadm.appblackdog.models.AgeRange
 import com.dadm.appblackdog.models.BlackDogNavigationRoutes
 import com.dadm.appblackdog.models.Breed
@@ -22,6 +23,7 @@ import com.dadm.appblackdog.models.UiPetForm
 import com.dadm.appblackdog.services.FirebaseService
 import com.dadm.appblackdog.services.GENERIC_TAG
 import com.dadm.appblackdog.utils.Constants
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +40,7 @@ class PetAddViewModel(
     private val breedRepository: BreedRepository,
     private val measureUnitRepository: MeasureUnitRepository,
     private val ownerRepository: OwnerRepository,
+    private val petRepository: PetRepository,
     private val firebaseService: FirebaseService,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiPetForm())
@@ -54,7 +57,7 @@ class PetAddViewModel(
         Log.d(GENERIC_TAG, "inicia carga de datos **************")
         _uiState.value = UiPetForm()
         showLoader(true)
-        viewModelScope.launch { loadData() }
+        viewModelScope.launch(Dispatchers.IO) { loadData() }
     }
 
     private fun showLoader(show: Boolean) {
@@ -63,7 +66,7 @@ class PetAddViewModel(
 
     private suspend fun loadData() = coroutineScope {
         var ownerList = listOf<Owner>()
-        val task = async {
+        val task = async(Dispatchers.IO) {
             ownerList = ownerRepository.getOwnerStream().first()
             ageRangeList = ageRangeRepository.getAllAgeRangeStream().first()
             ageRangeList = ageRangeRepository.getAllAgeRangeStream().first()
@@ -181,13 +184,15 @@ class PetAddViewModel(
     private suspend fun createPet(context: Context, navController: NavController) = coroutineScope {
         val newPet = _uiState.value.toPetMap(owner.serverId)
         val task =
-            async {
+            async(Dispatchers.IO) {
                 firebaseService.setData(
                     reference = Constants.PET_TABLE_NAME,
                     data = newPet
                 )
             }.await()
+
         if (task) {
+            launch(Dispatchers.IO) { petRepository.insertPet(_uiState.value.toPet(owner.serverId)) }
             Toast.makeText(
                 context,
                 ContextCompat.getString(context, R.string.create_pet),

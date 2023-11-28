@@ -42,10 +42,27 @@ data class UiPetForm(
             "ageRange" to ageRange,
             "weight" to weight,
             "measureUnitId" to measureUnitId,
-            "measureUnit" to measureUnitId,
+            "measureUnit" to measureUnit,
             "birthdate" to birthdateTimeStamp,
             "description" to description,
             "photoUrl" to photoUrl
+        )
+    }
+
+    fun toPet(ownerId: String):Pet{
+        return Pet(
+            ownerId = ownerId,
+            name = name,
+            breedId = breedId,
+            breed = breed,
+            ageRangeId = ageRangeId,
+            ageRange = ageRange,
+            weight = weight,
+            measureUnitId = measureUnitId,
+            measureUnit = measureUnit,
+            birthdate = birthdateTimeStamp,
+            description = description,
+            photoUrl = photoUrl,
         )
     }
 }
