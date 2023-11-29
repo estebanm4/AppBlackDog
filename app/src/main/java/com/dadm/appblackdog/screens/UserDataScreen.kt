@@ -36,7 +36,7 @@ fun UserDataScreen(
     navController: NavController,
     drawerState: DrawerState,
     petViewModel: PetAddViewModel?,
-    profileViewModel: PetProfileViewModel?,
+    profileViewModel: PetProfileViewModel,
 ) {
     //content
     Column(
@@ -45,8 +45,10 @@ fun UserDataScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+//        if (profileViewModel.pets.isEmpty())
 //            WithoutPetsScreen(navController, drawerState, petViewModel)
-        PetProfileScreen(navController, drawerState, petViewModel,profileViewModel)
+//        else
+            PetProfileScreen(navController, drawerState, petViewModel, profileViewModel)
     }
 
 }
@@ -56,13 +58,14 @@ fun UserDataScreen(
 fun GreetingPreview() {
     val context = LocalContext.current
     AppBlackDogTheme {
-        UserDataScreen(
-            petViewModel = null,
-            profileViewModel = null,
-            navController = NavController(context),
-            drawerState = DrawerState(
-                DrawerValue.Closed
-            ),
-        )
+//        UserDataScreen(
+//            petViewModel = null,
+//            profileViewModel = null,
+//            navController = NavController(context),
+//            drawerState = DrawerState(
+//                DrawerValue.Closed
+//            ),
+//        )
     }
 }
+

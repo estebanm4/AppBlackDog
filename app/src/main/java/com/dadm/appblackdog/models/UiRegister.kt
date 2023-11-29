@@ -1,11 +1,11 @@
 package com.dadm.appblackdog.models
 
 data class UiRegister(
-    var email: String = "test@test.com",
-    var password: String = "test123",
-    var validatedPassword: String = "test123",
-    var name: String = "yulian",
-    var lastname: String = "sandoval",
+    var email: String = "",
+    var password: String = "",
+    var validatedPassword: String = "",
+    var name: String = "",
+    var lastname: String = "",
     var photoUrl: String = "",
     var hasPets: Boolean = false,
     /** loader*/

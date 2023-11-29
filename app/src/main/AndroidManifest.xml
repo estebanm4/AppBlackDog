@@ -34,7 +34,7 @@
             android:theme="@style/Theme.AppBlackDog" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="$AIzaSyBQojR1JcKQA7vFsq2R8MFUeTK3WiNppVQ" />
+            android:value="AIzaSyBQojR1JcKQA7vFsq2R8MFUeTK3WiNppVQ" />
     </application>
 
 </manifest>
